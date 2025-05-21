@@ -6,47 +6,11 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:39:45 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/21 20:59:54 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/05/21 22:12:23 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cube3d.h"
-
-// void render_pnj(t_game *game)
-// {
-// //not finish
-// }
-
-// void	update_pnj(t_game *game)
-// {
-// 	double dx = game->pnj.x - game->player.x;
-//     double dy = game->pnj.y - game->player.y;
-//     game->pnj.distance = sqrt(dx*dx + dy*dy);
-// }
-
-// void	init_pnj(t_game *game)
-// {
-// 	game->pnj.x = 0;
-// 	game->pnj.y = 0;
-// 	game->pnj.distance = 0;
-// 	game->pnj.active = 1;
-// 	game->pnj->texture.ptr = mlx_xpm_file_to_image(game->mlx,
-//"./texture/pnj.xpm",
-//                                                  &width, &height);
-// 	if (!game->pnj.texture.ptr)
-//     {
-//         printf("Erreur: a mettre en anglais mais pas de sprite ennemi
-// pnj\n");
-//         game->pnj.active = 0;
-//         return ;
-//     }
-//     game->pnj.texture.width = width;
-//     game->pnj.texture.height = height;
-//     game->pnj.texture.addr = mlx_get_data_addr(game->pnj.texture.ptr,
-//                                              &game->pnj.texture.bits_per_pixel,
-//                                              &game->pnj.texture.line_length,
-//                                              &game->pnj.texture.endian);
-// }
 
 int enemy_sees_you(t_enemy *enemy, t_player *player, t_map *map)
 {
@@ -61,7 +25,7 @@ int enemy_sees_you(t_enemy *enemy, t_player *player, t_map *map)
 	dy = player->y / TILE_SIZE - enemy->y;
 	angle_to_player = atan2(dy, dx);
 	delta_angle = normalize_angle(angle_to_player - enemy->angle);
-	fov = M_PI / 3; // Wider FOV for better detection
+	fov = M_PI ; // Wider FOV for better detection
 	if (fabs(delta_angle) < fov / 2)
 	{
 		if (line_of_sight(enemy->x, enemy->y, player->x / TILE_SIZE, player->y / TILE_SIZE, map))
@@ -109,152 +73,141 @@ int line_of_sight(double ex, double ey, double px, double py, t_map *map)
 	// Non ho incontrato ostacoli
 	return (1);
 }
-
 void update_enemy(t_enemy *enemy, t_player *player, t_map *map)
 {
-	double dx;
-	double dy;
-	double distance;
-	double speed;
-	int next_x;
-	int next_y;
-	double angle_to_player;
-	double move_x;
-	double move_y;
-	int player_tile_x;
-	int player_tile_y;
-	int enemy_tile_x;
-	int enemy_tile_y;
+	double dx = player->x / TILE_SIZE - enemy->x;
+	double dy = player->y / TILE_SIZE - enemy->y;
+	double distance = sqrt(dx * dx + dy * dy);
 
 	if (enemy->health <= 0)
 	{
 		enemy->state = DEAD;
 		return;
 	}
-	player_tile_x = (int)(player->x / TILE_SIZE);
-	player_tile_y = (int)(player->y / TILE_SIZE);
-	enemy_tile_x = (int)(enemy->x);
-	enemy_tile_y = (int)(enemy->y);
-	if (player_tile_x == enemy_tile_x && player_tile_y == enemy_tile_y)
-		return;
-	dx = player->x / TILE_SIZE - enemy->x;
-	dy = player->y / TILE_SIZE - enemy->y;
-	distance = sqrt(dx * dx + dy * dy);
-	if (distance < 1.0 && enemy->state != MELEE)
-	{
-		enemy->state = MELEE;
-		enemy->cooldown = 0;
-		return;
-	}
 	if (enemy->state == IDLE)
-	{
-		if (distance < 5.0)
-		{
-			enemy->state = SEARCH;
-			enemy->sees_player = 0;
-			return;
-		}
-		speed = 0.03;
-		move_x = cos(enemy->angle) * speed;
-		move_y = sin(enemy->angle) * speed;
-		next_x = (int)(enemy->x + move_x);
-		next_y = (int)(enemy->y + move_y);
-		if (next_x >= 0 && next_x < map->width && next_y < map->height && next_y >= 0 && map->matrix[next_y][next_x] != '1')
-		{
-			enemy->x = enemy->x + move_x;
-			enemy->y = enemy->y + move_y;
-		}
-		else
-		{
-			enemy->angle = enemy->angle + ((rand() % 60) - 30) * M_PI / 180;
-			enemy->angle = normalize_angle(enemy->angle);
-		}
-		if (enemy_sees_you(enemy, player, map))
-		{
-			enemy->state = SEARCH;
-			enemy->sees_player = 1;
-		}
-	}
+		idle(enemy, player, map, dx, dy, distance);
 	else if (enemy->state == SEARCH)
-	{
-		if (!enemy_sees_you(enemy, player, map))
-		{
-			enemy->state = IDLE;
-			enemy->sees_player = 0;
-			return;
-		}
-		if (distance < 1.5)
-		{
-			enemy->state = MELEE;
-			enemy->cooldown = 0;
-			return;
-		}
-		else if (distance < 10)
-		{
-			enemy->state = SHOOT;
-			enemy->cooldown = 0;
-			return;
-		}
-		angle_to_player = atan2(dy, dx);
-		enemy->angle = angle_to_player;
-		speed = 0.05;
-		move_x = cos(enemy->angle) * speed;
-		move_y = sin(enemy->angle) * speed;
-		next_x = (int)(enemy->x + move_x);
-		next_y = (int)(enemy->y + move_y);
-		if (next_x >= 0 && next_x < map->width && next_y < map->height && next_y >= 0 && map->matrix[next_y][next_x] != '1')
-		{
-			enemy->x = enemy->x + move_x;
-			enemy->y = enemy->y + move_y;
-		}
-	}
+		search(enemy, player, map, dx, dy, distance);
 	else if (enemy->state == SHOOT)
-	{
-		if (!enemy_sees_you(enemy, player, map))
-		{
-			enemy->state = SEARCH;
-			enemy->sees_player = 0;
-			return;
-		}
-		if (distance >= 6.0)
-		{
-			enemy->state = SEARCH;
-			return;
-		}
-		if (distance < 1.5)
-		{
-			enemy->state = MELEE;
-			enemy->cooldown = 0;
-			return;
-		}
-		angle_to_player = atan2(dy, dx);
-		enemy->angle = angle_to_player;
-		// Attack with cooldown
-		if (enemy->cooldown <= 0)
-		{
-			player->health = player->health - 10;
-			enemy->cooldown = 30;
-		}
-		else
-			enemy->cooldown--;
-	}
+		shoot(enemy, player, map, dx, dy, distance);
 	else if (enemy->state == MELEE)
+		melee(enemy, player, map, dx, dy, distance);
+}
+void idle(t_enemy *e, t_player *p, t_map *m, double dx, double dy, double d)
+{
+	double move_x, move_y, speed = 0.03;
+	int next_x, next_y;
+
+	(void)dx;
+	(void)dy;
+	(void)d;
+	move_x = cos(e->angle) * speed;
+	move_y = sin(e->angle) * speed;
+	next_x = (int)(e->x + move_x);
+	next_y = (int)(e->y + move_y);
+	if (next_x >= 0 && next_x < m->width && next_y >= 0 && next_y < m->height &&
+		m->matrix[next_y][next_x] != '1')
 	{
-		if (!enemy_sees_you(enemy, player, map) || distance >= 1.5)
-		{
-			enemy->state = SEARCH;
-			return;
-		}
-		angle_to_player = atan2(dy, dx);
-		enemy->angle = angle_to_player;
-		if (enemy->cooldown <= 0)
-		{
-			player->health = player->health - 25;
-			enemy->cooldown = 60;
-		}
-		else
-			enemy->cooldown--;
+		e->x += move_x;
+		e->y += move_y;
 	}
+	else
+	{
+		e->angle += ((rand() % 60) - 30) * M_PI / 180;
+		e->angle = normalize_angle(e->angle);
+	}
+	if (enemy_sees_you(e, p, m))
+	{
+		e->state = SEARCH;
+		e->sees_player = 1;
+	}
+}
+void shoot(t_enemy *e, t_player *p, t_map *m, double dx, double dy, double d)
+{
+	double angle_to_player;
+
+	if (!enemy_sees_you(e, p, m))
+	{
+		e->state = SEARCH;
+		e->sees_player = 0;
+		return;
+	}
+	if (d >= 6.0)
+	{
+		e->state = SEARCH;
+		return;
+	}
+	if (d < 1.5)
+	{
+		e->state = MELEE;
+		e->cooldown = 0;
+		return;
+	}
+	angle_to_player = atan2(dy, dx);
+	e->angle = angle_to_player;
+	if (e->cooldown <= 0)
+	{
+		p->health -= 10;
+		e->cooldown = 30;
+	}
+	else
+		e->cooldown--;
+}
+
+void search(t_enemy *e, t_player *p, t_map *m, double dx, double dy, double d)
+{
+	double move_x, move_y, speed = 0.05, angle_to_player;
+	int next_x, next_y;
+
+	if (!enemy_sees_you(e, p, m))
+	{
+		e->state = IDLE;
+		e->sees_player = 0;
+		return;
+	}
+	if (d < 1.5)
+	{
+		e->state = MELEE;
+		e->cooldown = 0;
+		return;
+	}
+	if (d < 6)
+	{
+		e->state = SHOOT;
+		e->cooldown = 0;
+		return;
+	}
+	angle_to_player = atan2(dy, dx);
+	e->angle = angle_to_player;
+	move_x = cos(e->angle) * speed;
+	move_y = sin(e->angle) * speed;
+	next_x = (int)(e->x + move_x);
+	next_y = (int)(e->y + move_y);
+	if (next_x >= 0 && next_x < m->width && next_y >= 0 && next_y < m->height &&
+		m->matrix[next_y][next_x] != '1')
+	{
+		e->x += move_x;
+		e->y += move_y;
+	}
+}
+void melee(t_enemy *e, t_player *p, t_map *m, double dx, double dy, double d)
+{
+	double angle_to_player;
+
+	if (!enemy_sees_you(e, p, m) || d >= 1.5)
+	{
+		e->state = SEARCH;
+		return;
+	}
+	angle_to_player = atan2(dy, dx);
+	e->angle = angle_to_player;
+	if (e->cooldown <= 0)
+	{
+		p->health -= 25;
+		e->cooldown = 30;
+	}
+	else
+		e->cooldown--;
 }
 
 void render_enemy(t_game *game, t_enemy *enemy)
@@ -303,12 +256,12 @@ void render_enemy(t_game *game, t_enemy *enemy)
 	/* ora sprite è visibile, procedi col draw */
 
 	/* 4) calcola dimensione sprite */
-	 sprite_size = (int)((TILE_SIZE / transform_y) * ((DISPLAY_WIDTH / 2) / tan(game->player.fov / 2.0f)));
+	sprite_size = (int)((TILE_SIZE / transform_y) * ((DISPLAY_WIDTH / 2) / tan(game->player.fov / 2.0f)));
 	if (sprite_size > DISPLAY_HEIGHT)
 		sprite_size = DISPLAY_HEIGHT;
 
 	/* 5) posizioni di draw */
-	 draw_x = screen_x - sprite_size / 2;
+	draw_x = screen_x - sprite_size / 2;
 	int y_offset = sprite_size / 6;
 	int draw_y = (DISPLAY_HEIGHT - sprite_size) / 2 + game->pitch + y_offset;
 

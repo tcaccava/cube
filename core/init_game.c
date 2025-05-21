@@ -6,7 +6,7 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 17:43:46 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/21 18:53:12 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/05/21 22:11:04 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,7 @@ int	init_game(t_game *game, char *map_file)
 			&game->map.enemy_texture.bits_per_pixel,
 			&game->map.enemy_texture.line_length,
 			&game->map.enemy_texture.endian);
-	game->num_enemies = 20;
+	game->num_enemies = 5;
 	game->enemies = malloc(sizeof(t_enemy) * game->num_enemies);
 	if (!game->enemies)
 		printf("Errore malloc enemies");
