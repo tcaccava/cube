@@ -6,7 +6,7 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:39:45 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/21 22:12:23 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/05/21 22:29:51 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,6 +212,8 @@ void melee(t_enemy *e, t_player *p, t_map *m, double dx, double dy, double d)
 
 void render_enemy(t_game *game, t_enemy *enemy)
 {
+	if (enemy->state == DEAD)
+		return;
 	float dx = enemy->x * TILE_SIZE - game->player.x;
 	float dy = enemy->y * TILE_SIZE - game->player.y;
 	float inv_det = 1.0f / (game->player.plane_x * game->player.dir_y - game->player.dir_x * game->player.plane_y);
@@ -337,4 +339,30 @@ void update_camera_vectors(t_player *player)
 	fov_half = player->fov / 2.0;
 	player->plane_x = -sin(player->angle) * tan(fov_half);
 	player->plane_y = cos(player->angle) * tan(fov_half);
+}
+
+void damage_enemy_at_position(t_game *game, double x, double y, int damage)
+{
+	int i;
+	double dx, dy, dist;
+
+	i = 0;
+	while (i < game->num_enemies)
+	{
+		t_enemy *e = &game->enemies[i];
+		if (e->state != DEAD)
+		{
+			dx = e->x - x;
+			dy = e->y - y;
+			dist = sqrt(dx * dx + dy * dy);
+			if (dist < 0.5)
+			{
+				e->health -= damage;
+				if (e->health <= 0)
+					e->state = DEAD;
+				return;
+			}
+		}
+		i++;
+	}
 }

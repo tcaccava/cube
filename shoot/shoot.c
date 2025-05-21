@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   shoot.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/21 22:23:45 by tcaccava          #+#    #+#             */
+/*   Updated: 2025/05/21 22:25:58 by tcaccava         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../cube3d.h"
 
 
@@ -43,6 +55,7 @@ void calculate_shoot(t_game *game)
             map_x = (int)(impact_x / TILE_SIZE);
             map_y = (int)(impact_y / TILE_SIZE);
             game->map.matrix[map_y][map_x] = 'i';
+            damage_enemy_at_position(game, impact_x / TILE_SIZE, impact_y / TILE_SIZE, 25);
         }
         else if (center_ray->hit_type == 'D')
         {
@@ -51,6 +64,7 @@ void calculate_shoot(t_game *game)
             map_x = (int)(impact_x / TILE_SIZE);
             map_y = (int)(impact_y / TILE_SIZE);
             game->map.matrix[map_y][map_x] = 'd';
+            damage_enemy_at_position(game, impact_x / TILE_SIZE, impact_y / TILE_SIZE, 25);
         }
     }
 }
