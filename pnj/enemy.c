@@ -6,7 +6,7 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:39:45 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/21 22:29:51 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/05/22 18:26:15 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ int enemy_sees_you(t_enemy *enemy, t_player *player, t_map *map)
 	double fov;
 
 	// Calculate direction to player
-	dx = player->x / TILE_SIZE - enemy->x;
-	dy = player->y / TILE_SIZE - enemy->y;
+	dx = (player->x / TILE_SIZE) - enemy->x;
+	dy = (player->y / TILE_SIZE) - enemy->y;
 	angle_to_player = atan2(dy, dx);
 	delta_angle = normalize_angle(angle_to_player - enemy->angle);
-	fov = M_PI ; // Wider FOV for better detection
+	fov = M_PI; // Wider FOV for better detection
 	if (fabs(delta_angle) < fov / 2)
 	{
 		if (line_of_sight(enemy->x, enemy->y, player->x / TILE_SIZE, player->y / TILE_SIZE, map))
@@ -97,25 +97,28 @@ void idle(t_enemy *e, t_player *p, t_map *m, double dx, double dy, double d)
 {
 	double move_x, move_y, speed = 0.03;
 	int next_x, next_y;
+	// RIMUOVERE: double old_x = e->x; double old_y = e->y;
 
-	(void)dx;
-	(void)dy;
-	(void)d;
+	(void)dx; (void)dy; (void)d;
+	
 	move_x = cos(e->angle) * speed;
 	move_y = sin(e->angle) * speed;
 	next_x = (int)(e->x + move_x);
 	next_y = (int)(e->y + move_y);
+	
 	if (next_x >= 0 && next_x < m->width && next_y >= 0 && next_y < m->height &&
 		m->matrix[next_y][next_x] != '1')
 	{
 		e->x += move_x;
 		e->y += move_y;
+		// RIMUOVERE: update_enemy_position_on_map(...)
 	}
 	else
 	{
 		e->angle += ((rand() % 60) - 30) * M_PI / 180;
 		e->angle = normalize_angle(e->angle);
 	}
+	
 	if (enemy_sees_you(e, p, m))
 	{
 		e->state = SEARCH;
@@ -158,6 +161,7 @@ void search(t_enemy *e, t_player *p, t_map *m, double dx, double dy, double d)
 {
 	double move_x, move_y, speed = 0.05, angle_to_player;
 	int next_x, next_y;
+	// RIMUOVERE: double old_x = e->x; double old_y = e->y;
 
 	if (!enemy_sees_you(e, p, m))
 	{
@@ -177,19 +181,23 @@ void search(t_enemy *e, t_player *p, t_map *m, double dx, double dy, double d)
 		e->cooldown = 0;
 		return;
 	}
+	
 	angle_to_player = atan2(dy, dx);
 	e->angle = angle_to_player;
 	move_x = cos(e->angle) * speed;
 	move_y = sin(e->angle) * speed;
 	next_x = (int)(e->x + move_x);
 	next_y = (int)(e->y + move_y);
+	
 	if (next_x >= 0 && next_x < m->width && next_y >= 0 && next_y < m->height &&
 		m->matrix[next_y][next_x] != '1')
 	{
 		e->x += move_x;
 		e->y += move_y;
+		// RIMUOVERE: update_enemy_position_on_map(...)
 	}
 }
+
 void melee(t_enemy *e, t_player *p, t_map *m, double dx, double dy, double d)
 {
 	double angle_to_player;
@@ -214,8 +222,8 @@ void render_enemy(t_game *game, t_enemy *enemy)
 {
 	if (enemy->state == DEAD)
 		return;
-	float dx = enemy->x * TILE_SIZE - game->player.x;
-	float dy = enemy->y * TILE_SIZE - game->player.y;
+	float dx = (enemy->x * TILE_SIZE) - game->player.x;
+	float dy = (enemy->y * TILE_SIZE) - game->player.y;
 	float inv_det = 1.0f / (game->player.plane_x * game->player.dir_y - game->player.dir_x * game->player.plane_y);
 
 	float transform_x = inv_det * (game->player.dir_y * dx - game->player.dir_x * dy);
@@ -341,28 +349,45 @@ void update_camera_vectors(t_player *player)
 	player->plane_y = cos(player->angle) * tan(fov_half);
 }
 
-void damage_enemy_at_position(t_game *game, double x, double y, int damage)
+void update_enemy_position_on_map(t_game *game, t_enemy *enemy, double old_x, double old_y)
 {
-	int i;
-	double dx, dy, dist;
+	int old_map_x = (int)(old_x);
+	int old_map_y = (int)(old_y);
+	int new_map_x = (int)(enemy->x);
+	int new_map_y = (int)(enemy->y);
 
-	i = 0;
-	while (i < game->num_enemies)
+	// Rimuovi il nemico dalla vecchia posizione se è cambiata
+	if (old_map_x != new_map_x || old_map_y != new_map_y)
 	{
-		t_enemy *e = &game->enemies[i];
-		if (e->state != DEAD)
+		// CORREZIONE: Rimuovi 'M' dalla vecchia posizione solo se c'è davvero un nemico lì
+		if (old_map_x >= 0 && old_map_x < game->map.width &&
+			old_map_y >= 0 && old_map_y < game->map.height)
 		{
-			dx = e->x - x;
-			dy = e->y - y;
-			dist = sqrt(dx * dx + dy * dy);
-			if (dist < 0.5)
+			if (game->map.matrix[old_map_y][old_map_x] == 'M')
 			{
-				e->health -= damage;
-				if (e->health <= 0)
-					e->state = DEAD;
-				return;
+				// Controlla se c'è ancora un nemico in questa posizione
+				int nemico_presente = 0;
+				for (int i = 0; i < game->num_enemies; i++)
+				{
+					if (game->enemies[i].active &&
+						(int)(game->enemies[i].x) == old_map_x &&
+						(int)(game->enemies[i].y) == old_map_y)
+					{
+						nemico_presente = 1;
+						break;
+					}
+				}
+				// Solo se non c'è più nessun nemico, rimuovi la 'M'
+				if (!nemico_presente)
+					game->map.matrix[old_map_y][old_map_x] = '0';
 			}
 		}
-		i++;
+
+		// Aggiungi il nemico alla nuova posizione
+		if (new_map_x >= 0 && new_map_x < game->map.width &&
+			new_map_y >= 0 && new_map_y < game->map.height && enemy->active)
+		{
+			game->map.matrix[new_map_y][new_map_x] = 'M';
+		}
 	}
 }

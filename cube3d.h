@@ -6,7 +6,7 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 21:50:29 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/21 22:30:10 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/05/22 18:04:08 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -375,6 +375,8 @@ void idle(t_enemy *e, t_player *p, t_map *m, double dx, double dy, double d);
 void shoot(t_enemy *e, t_player *p, t_map *m, double dx, double dy, double d);
 void search(t_enemy *e, t_player *p, t_map *m, double dx, double dy, double d);
 void melee(t_enemy *e, t_player *p, t_map *m, double dx, double dy, double d);
-void damage_enemy_at_position(t_game *game, double x, double y, int damage);
+int damage_enemy_at_position(t_game *game, int tile_x, int tile_y, int damage);
+void update_enemy_position_on_map(t_game *game, t_enemy *enemy, double old_x, double old_y);
+
 
 #endif

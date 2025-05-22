@@ -6,23 +6,22 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 22:23:45 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/21 22:25:58 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/05/22 19:20:54 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cube3d.h"
-
-
+// Sostituisci la tua calculate_shoot con questa versione
 void calculate_shoot(t_game *game)
 {
     double impact_x;
     double impact_y;
     int map_x;
     int map_y;
-    
+
     int center_ray_index = DISPLAY_WIDTH / 2;
     t_ray *center_ray = &game->rays[center_ray_index];
-    
+
     if (game->current_weapon == PORTALGUN)
     {
         if (center_ray->hit_type == '1')
@@ -48,23 +47,75 @@ void calculate_shoot(t_game *game)
     }
     else if (game->current_weapon == RAYGUN)
     {
-        if (center_ray->hit_type == '1')
+        // NUOVO: Controlla manualmente se stiamo mirando a un nemico
+        double player_x = game->player.x;
+        double player_y = game->player.y;
+        double ray_dir_x = cos(game->player.angle);
+        double ray_dir_y = sin(game->player.angle);
+        
+        int enemy_hit = 0;
+        double closest_enemy_distance = center_ray->distance;
+        
+        // Controlla tutti i nemici attivi
+        for (int i = 0; i < game->num_enemies; i++)
         {
-            impact_x = center_ray->wall_hit_x;
-            impact_y = center_ray->wall_hit_y;
-            map_x = (int)(impact_x / TILE_SIZE);
-            map_y = (int)(impact_y / TILE_SIZE);
-            game->map.matrix[map_y][map_x] = 'i';
-            damage_enemy_at_position(game, impact_x / TILE_SIZE, impact_y / TILE_SIZE, 25);
+            t_enemy *enemy = &game->enemies[i];
+            if (!enemy->active || enemy->state == DEAD)
+                continue;
+                
+            // Coordinate del nemico in pixel
+            double enemy_px = enemy->x * TILE_SIZE;
+            double enemy_py = enemy->y * TILE_SIZE;
+            
+            // Calcola se il raggio passa abbastanza vicino al nemico
+            double dx_to_enemy = enemy_px - player_x;
+            double dy_to_enemy = enemy_py - player_y;
+            double distance_to_enemy = sqrt(dx_to_enemy * dx_to_enemy + dy_to_enemy * dy_to_enemy);
+            
+            // Verifica che il nemico sia nella direzione in cui stiamo mirando
+            double dot_product = (dx_to_enemy * ray_dir_x + dy_to_enemy * ray_dir_y) / distance_to_enemy;
+            
+            if (dot_product > 0.9 && distance_to_enemy < closest_enemy_distance) // 0.9 = circa 25 gradi di tolleranza
+            {
+                // Calcola quanto siamo vicini alla linea di mira
+                double cross_product = fabs(dx_to_enemy * ray_dir_y - dy_to_enemy * ray_dir_x);
+                double distance_from_line = cross_product / sqrt(ray_dir_x * ray_dir_x + ray_dir_y * ray_dir_y);
+                
+                // Se siamo abbastanza vicini alla linea di mira
+                if (distance_from_line < TILE_SIZE * 0.4) // 40% della tile size come tolleranza
+                {
+                    // Colpito!
+                    map_x = (int)(enemy->x);
+                    map_y = (int)(enemy->y);
+                    printf("Enemy hit at [%d, %d]\n", map_x, map_y);
+                    
+                    if (damage_enemy_at_position(game, map_x, map_y, 25))
+                    {
+                        printf("Enemy flatlined at [%d, %d]\n", map_x, map_y);
+                    }
+                    enemy_hit = 1;
+                    closest_enemy_distance = distance_to_enemy;
+                    break; // Colpisci solo il nemico più vicino
+                }
+            }
         }
-        else if (center_ray->hit_type == 'D')
+        
+        // Se non abbiamo colpito nessun nemico, gestisci muri/porte normalmente
+        if (!enemy_hit)
         {
             impact_x = center_ray->wall_hit_x;
             impact_y = center_ray->wall_hit_y;
             map_x = (int)(impact_x / TILE_SIZE);
             map_y = (int)(impact_y / TILE_SIZE);
-            game->map.matrix[map_y][map_x] = 'd';
-            damage_enemy_at_position(game, impact_x / TILE_SIZE, impact_y / TILE_SIZE, 25);
+            
+            if (center_ray->hit_type == '1')
+            {
+                game->map.matrix[map_y][map_x] = 'i';
+            }
+            else if (center_ray->hit_type == 'D')
+            {
+                game->map.matrix[map_y][map_x] = 'd';
+            }
         }
     }
 }
@@ -106,5 +157,33 @@ int mouse_button(int button, int x, int y, t_game *game)
         remove_all_portals(game);
     }
 
+    return (0);
+}
+
+int damage_enemy_at_position(t_game *game, int tile_x, int tile_y, int damage)
+{
+    int i = 0;
+    
+    while (i < game->num_enemies)
+    {
+        t_enemy *enemy = &game->enemies[i];
+        int enemy_tile_x = (int)(enemy->x);
+        int enemy_tile_y = (int)(enemy->y);
+
+        // Controlla se il nemico è nella tile colpita E è attivo
+        if (enemy_tile_x == tile_x && enemy_tile_y == tile_y && enemy->active)
+        {
+            enemy->health -= damage;
+            if (enemy->health <= 0)
+            {
+                enemy->active = 0;
+                enemy->state = DEAD;
+                return (1); // Nemico morto
+            }
+            else
+                return (0);
+        }
+        i++;
+    }
     return (0);
 }

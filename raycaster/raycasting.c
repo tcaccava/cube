@@ -6,7 +6,7 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 10:09:42 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/21 20:47:59 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/05/21 23:10:43 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ t_intersect	h_intersection(int x_player, int y_player, double radiant_angle)
 	return (h);
 }
 
+
 int	is_not_wall(t_map *map, double x, double y)
 {
 	int	map_x;
@@ -84,7 +85,7 @@ int	is_not_wall(t_map *map, double x, double y)
 		return (0);
 	if (map->matrix[map_y][map_x] == '1' || map->matrix[map_y][map_x] == 'D'
 		|| map->matrix[map_y][map_x] == 'P' || map->matrix[map_y][map_x] == 'i'
-		|| map->matrix[map_y][map_x] == 'd')
+		|| map->matrix[map_y][map_x] == 'd' || map->matrix[map_y][map_x] == 'M')
 		return (0);
 	else
 		return (1);
