@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   game_loop.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/12 17:43:09 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/21 20:53:24 by tcaccava         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "cube3d.h"
 
 int	close_window(void *param)
@@ -25,7 +13,6 @@ int	render_next_frame(t_game *game)
 	double		ray_offset;
 	double		radiant_angle;
 	static int	anim_frames = 0;
-	int			j;
 
 	move_player(&game->player);
 	i = 0;
@@ -65,36 +52,11 @@ int	render_next_frame(t_game *game)
 	if (game->player.fire_cooldown > 0)
 		game->player.fire_cooldown--;
 	render_scene(game);
-	j = 0;
-	while (j < game->num_enemies)
-	{
-		if (game->enemies[j].active)
-			render_enemy(game, &game->enemies[j]);
-		j++;
-	}
+	render_next_frame_enemies(game);
 	draw_crosshair(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->screen.ptr, 0, 0);
 	render_ui(game);
 	return (0);
-}
-
-void	render_scene(t_game *game)
-{
-	int	col;
-
-	col = 0;
-	while (col < DISPLAY_WIDTH)
-	{
-		render_column(game, col, &game->rays[col]);
-		col++;
-	}
-}
-
-void	render_ui(t_game *game)
-{
-	render_weapon(game);
-	draw_health_bar(game);
-	minimap(game);
 }
 
 int	loop_game(t_game *game)

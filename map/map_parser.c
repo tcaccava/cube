@@ -105,11 +105,8 @@ int	set_player_pos(t_game *game)
 
 int set_enemy_pos(t_game *game)
 {
-    int y;
-    int x;
-    int idx;
-
-    idx = 0;
+    int y, x, idx = 0;
+    
     y = 0;
     while (y < game->map.height)
     {
@@ -118,19 +115,24 @@ int set_enemy_pos(t_game *game)
         {
             if (game->map.matrix[y][x] == 'M' && idx < game->num_enemies)
             {
-                // Position in grid coordinates (cells)
-                // No need to add 0.5 here, that gets added during render
-                game->enemies[idx].x = x;
-                game->enemies[idx].y = y;
+                // AVANT : position en cellules (x=2, y=3)
+                // game->enemies[idx].x = x;
+                // game->enemies[idx].y = y;
+                
+                // APRÈS : position en pixels comme le joueur !
+                // Centre de la cellule : (x + 0.5) * TILE_SIZE
+                game->enemies[idx].x = (x * TILE_SIZE) + (TILE_SIZE / 2);
+                game->enemies[idx].y = (y * TILE_SIZE) + (TILE_SIZE / 2);
+                
+                // Exemple : cellule [2,3] → pixels [160, 224] (avec TILE_SIZE=64)
+                
                 game->enemies[idx].active = 1;
                 game->enemies[idx].state = IDLE;
-                game->enemies[idx].health = 100;
-                game->enemies[idx].speed = 0.03;
+                game->enemies[idx].health = 50;
+                game->enemies[idx].speed = 2.0;  // Vitesse en PIXELS maintenant !
                 game->enemies[idx].sees_player = 0;
                 game->enemies[idx].angle = ((double)rand() / RAND_MAX) * 2 * M_PI;
-                game->enemies[idx].texture = &game->map.enemy_texture;
                 
-                // Replace the 'M' with '0' in the map to make the space walkable
                 game->map.matrix[y][x] = '0';
                 idx++;
             }

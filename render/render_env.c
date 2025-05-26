@@ -12,8 +12,36 @@
 
 #include "../cube3d.h"
 
+t_img* get_wall_texture(t_game *game, t_ray *ray)
+{
+    // Si on a les 4 textures directionnelles (mode 6 arguments)
+    if (game->map.north.ptr != NULL)
+    {
+        if (ray->hit_vertical) // Mur vertical → EST ou OUEST
+        {
+            if (cos(ray->radiant_angle) > 0)
+                return &game->map.east;
+            else
+                return &game->map.west;
+        }
+        else // Mur horizontal → NORD ou SUD
+        {
+            if (sin(ray->radiant_angle) > 0)
+                return &game->map.south;
+            else
+                return &game->map.north;
+        }
+    }
+    else
+    {
+        return &game->map.wall_texture;
+    }
+}
+
 void render_weapon(t_game *game)
 {
+    if (game->map.north.ptr != NULL)
+        return;
     t_render renderer;
     t_img *weapon;
     char *dst;
@@ -261,7 +289,7 @@ void render_wall(t_game *game, int column_x, t_render *renderer, t_ray *ray)
     int   CY = (DISPLAY_HEIGHT / 2) + game->pitch;
     double H  = renderer->wall_height;
     int   texture_y;
-
+    t_img *current_texture = get_wall_texture(game, ray);
     /* Calcolo tex_x in base al punto d’impatto */
     if (ray->hit_vertical)
     {
@@ -287,9 +315,9 @@ void render_wall(t_game *game, int column_x, t_render *renderer, t_ray *ray)
             else if (texture_y >= TILE_SIZE) texture_y = TILE_SIZE - 1;
 
             /* Preleva il pixel dalla texture del muro */
-            renderer->tex_addr = game->map.wall_texture.addr
-                + (texture_y * game->map.wall_texture.line_length
-                   + renderer->tex_x * (game->map.wall_texture.bits_per_pixel / 8));
+            renderer->tex_addr = current_texture->addr
+    + (texture_y * current_texture->line_length      // ← CORRIGÉ
+    + renderer->tex_x * (current_texture->bits_per_pixel / 8));  // ← CORRIGÉ
             renderer->color = *(unsigned int *)renderer->tex_addr;
 
             /* Scrive sul buffer video */
