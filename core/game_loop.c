@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   game_loop.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/26 20:17:11 by tcaccava          #+#    #+#             */
+/*   Updated: 2025/05/26 20:52:18 by tcaccava         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cube3d.h"
 
 int	close_window(void *param)
@@ -7,14 +19,10 @@ int	close_window(void *param)
 	return (0);
 }
 
-int	render_next_frame(t_game *game)
+static void	update_all_enemies(t_game *game)
 {
-	int			i;
-	double		ray_offset;
-	double		radiant_angle;
-	static int	anim_frames = 0;
+	int	i;
 
-	move_player(&game->player);
 	i = 0;
 	while (i < game->num_enemies)
 	{
@@ -22,6 +30,14 @@ int	render_next_frame(t_game *game)
 			update_enemy(&game->enemies[i], &game->player, &game->map);
 		i++;
 	}
+}
+
+static void	cast_all_rays(t_game *game)
+{
+	int		i;
+	double	ray_offset;
+	double	radiant_angle;
+
 	i = 0;
 	while (i < DISPLAY_WIDTH)
 	{
@@ -34,39 +50,39 @@ int	render_next_frame(t_game *game)
 				- game->player.angle);
 		i++;
 	}
+}
+
+static void	weapon_animation(t_game *game, int *anim_frames)
+{
 	if (game->player.weapon.is_firing)
 	{
-		anim_frames++;
-		if (anim_frames > 11)
+		(*anim_frames)++;
+		if (*anim_frames > 11)
 		{
 			game->player.weapon.is_firing = 0;
 			game->player.weapon.current_state = WEAPON_NEUTRE;
 			game->player.weapon.frame = 0;
-			anim_frames = 0;
+			*anim_frames = 0;
 		}
 	}
 	else
-	{
-		anim_frames = 0;
-	}
+		*anim_frames = 0;
 	if (game->player.fire_cooldown > 0)
 		game->player.fire_cooldown--;
+}
+
+int	render_next_frame(t_game *game)
+{
+	static int	anim_frames;
+
+	move_player(&game->player);
+	update_all_enemies(game);
+	cast_all_rays(game);
+	weapon_animation(game, &anim_frames);
 	render_scene(game);
 	render_next_frame_enemies(game);
 	draw_crosshair(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->screen.ptr, 0, 0);
 	render_ui(game);
-	return (0);
-}
-
-int	loop_game(t_game *game)
-{
-	mlx_hook(game->win, 2, 1L << 0, key_press, &game->player);
-	mlx_hook(game->win, 3, 1L << 1, key_release, &game->player);
-	mlx_hook(game->win, 17, 1L << 17, close_window, game);
-	mlx_hook(game->win, 6, 1L << 6, mouse_move, game);
-	mlx_mouse_hook(game->win, mouse_button, game);
-	mlx_loop_hook(game->mlx, render_next_frame, game);
-	mlx_loop(game->mlx);
 	return (0);
 }

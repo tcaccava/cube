@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   texture_loader_2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/26 20:57:43 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/26 22:34:07 by tcaccava         ###   ########.fr       */
+/*   Created: 2025/05/26 21:03:13 by tcaccava          #+#    #+#             */
+/*   Updated: 2025/05/26 22:30:51 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cube3d.h"
 
-int	main(int argc, char **argv)
+int	load_all_textures(t_game *game)
 {
-	t_game	game;
-
-	if (!init_game_mode(&game, argc, argv))
-		return (1);
-	init_rays(&game);
-	loop_game(&game);
-	return (0);
+	if (!load_basic_textures(game))
+		return (0);
+	if (!load_door_textures(game))
+		return (0);
+	if (!load_special_textures(game))
+		return (0);
+	return (1);
 }
