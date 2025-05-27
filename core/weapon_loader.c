@@ -6,11 +6,11 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 22:15:06 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/26 22:48:32 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/05/27 20:25:59 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube3d.h"
+#include "../cube3d.h"
 
 static int	load_single_weapon_texture(void *mlx, t_img *tex, char *path)
 {

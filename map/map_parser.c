@@ -1,4 +1,16 @@
-#include "cube3d.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map_parser.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/27 20:29:18 by tcaccava          #+#    #+#             */
+/*   Updated: 2025/05/27 20:52:24 by tcaccava         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../cube3d.h"
 
 int	check_borders(t_map *map)
 {
@@ -26,10 +38,23 @@ int	check_borders(t_map *map)
 	return (1);
 }
 
+static int	is_invalid_tile(t_map *map, int x, int y)
+{
+	if (y == 0 || y == map->height - 1 || x == 0 || x == map->width - 1)
+		return (1);
+	if (map->matrix[y - 1][x - 1] == ' ' || map->matrix[y - 1][x] == ' '
+		|| map->matrix[y - 1][x + 1] == ' ' || map->matrix[y][x - 1] == ' '
+		|| map->matrix[y][x + 1] == ' ' || map->matrix[y + 1][x - 1] == ' '
+		|| map->matrix[y + 1][x] == ' ' || map->matrix[y + 1][x + 1] == ' ')
+		return (1);
+	return (0);
+}
+
 int	check_playable_spaces(t_map *map)
 {
-	int	x;
-	int	y;
+	int		x;
+	int		y;
+	char	tile;
 
 	y = 0;
 	while (y < map->height)
@@ -37,19 +62,11 @@ int	check_playable_spaces(t_map *map)
 		x = 0;
 		while (x < map->width)
 		{
-			if (map->matrix[y][x] == '0' || map->matrix[y][x] == 'N'
-				|| map->matrix[y][x] == 'S' || map->matrix[y][x] == 'E'
-				|| map->matrix[y][x] == 'W')
+			tile = map->matrix[y][x];
+			if (tile == '0' || tile == 'N' || tile == 'S' || tile == 'E'
+				|| tile == 'W')
 			{
-				if (y == 0 || y == map->height - 1 || x == 0 || x == map->width
-					- 1)
-					return (printf("Error: Invalid Map"));
-				if (map->matrix[y - 1][x - 1] == ' ' || map->matrix[y
-					- 1][x] == ' ' || map->matrix[y - 1][x + 1] == ' '
-					|| map->matrix[y][x - 1] == ' ' || map->matrix[y][x
-					+ 1] == ' ' || map->matrix[y + 1][x - 1] == ' '
-					|| map->matrix[y + 1][x] == ' ' || map->matrix[y + 1][x
-					+ 1] == ' ')
+				if (is_invalid_tile(map, x, y))
 					return (printf("Error: Invalid Map"));
 			}
 			x++;
@@ -59,19 +76,25 @@ int	check_playable_spaces(t_map *map)
 	return (1);
 }
 
-int	validate_map(t_map *map)
+static void	set_player_angle_and_position(t_game *game, int x, int y, char dir)
 {
-	if (!check_borders(map))
-		return (0);
-	if (!check_playable_spaces(map))
-		return (0);
-	return (1);
+	game->player.x = x * TILE_SIZE + TILE_SIZE / 2;
+	game->player.y = y * TILE_SIZE + TILE_SIZE / 2;
+	if (dir == 'N')
+		game->player.angle = 3 * M_PI / 2;
+	else if (dir == 'E')
+		game->player.angle = 0;
+	else if (dir == 'S')
+		game->player.angle = M_PI / 2;
+	else if (dir == 'W')
+		game->player.angle = M_PI;
 }
 
 int	set_player_pos(t_game *game)
 {
-	int	y;
-	int	x;
+	int		x;
+	int		y;
+	char	tile;
 
 	y = 0;
 	while (y < game->map.height)
@@ -79,20 +102,10 @@ int	set_player_pos(t_game *game)
 		x = 0;
 		while (x < game->map.width)
 		{
-			if (game->map.matrix[y][x] == 'N' || game->map.matrix[y][x] == 'E'
-				|| game->map.matrix[y][x] == 'S'
-				|| game->map.matrix[y][x] == 'W')
+			tile = game->map.matrix[y][x];
+			if (tile == 'N' || tile == 'E' || tile == 'S' || tile == 'W')
 			{
-				game->player.x = (x * TILE_SIZE) + (TILE_SIZE / 2);
-				game->player.y = (y * TILE_SIZE) + (TILE_SIZE / 2);
-				if (game->map.matrix[y][x] == 'N')
-					game->player.angle = 3 * M_PI / 2;
-				else if (game->map.matrix[y][x] == 'E')
-					game->player.angle = 0;
-				else if (game->map.matrix[y][x] == 'S')
-					game->player.angle = M_PI / 2;
-				else if (game->map.matrix[y][x] == 'W')
-					game->player.angle = M_PI;
+				set_player_angle_and_position(game, x, y, tile);
 				game->map.matrix[y][x] = '0';
 				return (1);
 			}
@@ -101,113 +114,4 @@ int	set_player_pos(t_game *game)
 		y++;
 	}
 	return (0);
-}
-
-int set_enemy_pos(t_game *game)
-{
-    int y, x, idx = 0;
-    
-    y = 0;
-    while (y < game->map.height)
-    {
-        x = 0;
-        while (x < game->map.width)
-        {
-            if (game->map.matrix[y][x] == 'M' && idx < game->num_enemies)
-            {
-                // AVANT : position en cellules (x=2, y=3)
-                // game->enemies[idx].x = x;
-                // game->enemies[idx].y = y;
-                
-                // APRÈS : position en pixels comme le joueur !
-                // Centre de la cellule : (x + 0.5) * TILE_SIZE
-                game->enemies[idx].x = (x * TILE_SIZE) + (TILE_SIZE / 2);
-                game->enemies[idx].y = (y * TILE_SIZE) + (TILE_SIZE / 2);
-                
-                // Exemple : cellule [2,3] → pixels [160, 224] (avec TILE_SIZE=64)
-                
-                game->enemies[idx].active = 1;
-                game->enemies[idx].state = IDLE;
-                game->enemies[idx].health = 50;
-                game->enemies[idx].speed = 2.0;  // Vitesse en PIXELS maintenant !
-                game->enemies[idx].sees_player = 0;
-                game->enemies[idx].angle = ((double)rand() / RAND_MAX) * 2 * M_PI;
-                
-                game->map.matrix[y][x] = '0';
-                idx++;
-            }
-            x++;
-        }
-        y++;
-    }
-    return (idx > 0);
-}
-
-int	check_file_cub(char *file_path)
-{
-	int	i;
-
-	i = ft_strlen(file_path);
-	if (i < 4)
-		return (0);
-	if (file_path[i - 4] == '.' && file_path[i - 3] == 'c' && file_path[i
-		- 2] == 'u' && file_path[i - 1] == 'b')
-		return (1);
-	return (0);
-}
-
-int	read_map(char *file_path, t_game *game)
-{
-	int		fd;
-	char	*line;
-	int		i;
-	int		line_count;
-	int		width;
-	int		len;
-
-	line_count = 0;
-	fd = open(file_path, O_RDONLY);
-	if (fd < 0)
-		return (0);
-	line = get_next_line(fd);
-	while (line)
-	{
-		line_count++;
-		free(line);
-		line = get_next_line(fd);
-	}
-	close(fd);
-	game->map.matrix = malloc(sizeof(char *) * (line_count + 1));
-	if (!game->map.matrix)
-		return (0);
-	fd = open(file_path, O_RDONLY);
-	if (fd < 0)
-	{
-		free(game->map.matrix);
-		return (0);
-	}
-	i = 0;
-	line = get_next_line(fd);
-	while (line)
-	{
-		len = ft_strlen(line);
-		if (len > 0 && line[len - 1] == '\n')
-			line[len - 1] = '\0';
-		game->map.matrix[i] = line;
-		i++;
-		line = get_next_line(fd);
-	}
-	game->map.matrix[i] = NULL;
-	close(fd);
-	game->map.height = line_count;
-	game->map.width = 0;
-	i = 0;
-	while (i < game->map.height)
-	{
-		width = ft_strlen(game->map.matrix[i]);
-		if (width > game->map.width)
-			game->map.width = width;
-		i++;
-	}
-	return (1);
 }

@@ -6,11 +6,11 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 17:43:46 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/26 20:46:48 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/05/27 20:25:36 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube3d.h"
+#include "../cube3d.h"
 
 int	init_mlx_window(t_game *game)
 {

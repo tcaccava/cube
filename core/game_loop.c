@@ -6,11 +6,11 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 20:17:11 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/26 20:52:18 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/05/27 20:25:23 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube3d.h"
+#include "../cube3d.h"
 
 int	close_window(void *param)
 {

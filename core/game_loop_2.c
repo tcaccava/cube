@@ -6,11 +6,11 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 20:44:54 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/26 20:45:57 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/05/27 20:25:17 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube3d.h"
+#include "../cube3d.h"
 
 int	loop_game(t_game *game)
 {

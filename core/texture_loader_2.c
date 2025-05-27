@@ -6,11 +6,11 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 21:03:13 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/26 22:30:51 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/05/27 20:25:46 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube3d.h"
+#include "../cube3d.h"
 
 int	load_all_textures(t_game *game)
 {

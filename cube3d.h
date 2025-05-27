@@ -6,7 +6,7 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 23:09:16 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/27 20:14:49 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/05/27 23:39:04 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -343,18 +343,34 @@ typedef struct s_los_args
 
 typedef struct s_sprite_info
 {
-	t_game		*game;
-	t_img		*sprite;
-	t_point		pos;
-	int			size;
-	t_enemy		*enemy;
-}	t_sprite_info;
+	t_game				*game;
+	t_img				*sprite;
+	t_point				pos;
+	int					size;
+	t_enemy				*enemy;
+}						t_sprite_info;
 
 typedef struct s_vec
 {
-	double	x;
-	double	y;
-}	t_vec;
+	double				x;
+	double				y;
+}						t_vec;
+
+typedef struct s_ray_data
+{
+	double				distance;
+	double				hit_x;
+	double				hit_y;
+	int					is_vertical;
+	char				hit_type;
+}						t_ray_data;
+
+typedef struct s_ray_calc
+{
+	t_intersect			*v;
+	t_intersect			*h;
+	int					column_x;
+}						t_ray_calc;
 // ========== CORE FUNCTIONS ==========
 // core/main.c
 void					init_player(t_player *player);
@@ -409,7 +425,8 @@ void					clean_line_ending(char *line);
 
 // map/map_reader.c
 int						read_map_lines(char *file_path, t_game *game);
-int						set_map_dimensions(t_game *game, int line_count);
+int						set_map_dimension(t_game *game, int line_count);
+int						read_maps(char *file_path, t_game *game);
 int						read_map(char *file_path, t_game *game);
 
 // map/map_validator.c
@@ -432,6 +449,11 @@ void					set_enemy_position(t_enemy *enemy, int x, int y);
 int						place_enemy_at_position(t_game *game, int x, int y,
 							int *enemy_index);
 int						set_enemy_pos(t_game *game);
+int						set_enemy_poss(t_game *game);
+int						count_lines(char *file_path);
+int						allocate_matrix(t_game *game, int line_count);
+int						fill_matrix(char *file_path, t_game *game);
+void					set_map_dimensions(t_game *game, int height);
 
 // ========== PLAYER FUNCTIONS ==========
 // player/player_move.c
@@ -450,17 +472,16 @@ t_intersect				h_intersection(int x_player, int y_player,
 int						is_not_wall(t_map *map, double x, double y);
 double					normalize_angle(double angle);
 char					get_hit_type(t_map *map, double x, double y);
-void					store_ray_info(t_game *game, int column_x,
-							double distance, double hit_x, double hit_y,
-							int is_vertical, char hit_type);
 double					ray_casting(t_game *game, double radiant_angle,
 							int column_x);
 double					no_fish_eye(double min_distance, double radiant_angle,
 							double player_angle);
 int						calc_wall_height(double corrected_dist);
+void					store_ray_info(t_game *game, int column_x,
+							t_ray_data *data);
+void					select_ray_hit(t_game *game, t_ray_calc *calc);
+void	cast_intersections(t_game *game, t_intersect *v, t_intersect *h);
 
-// raycaster/ray_utils.c
-// (actuellement vide)
 
 // ========== RENDER FUNCTIONS ==========
 // render/render_core.c
@@ -572,10 +593,10 @@ void					render_death_animation(t_game *game, t_enemy *enemy);
 
 // enemy/enemy_sprite.c
 
-void	draw_sprite_pixel(t_sprite_info *info, int i, int j);
-void	draw_enemy_sprite(t_sprite_info *info);
-void	render_enemy_sprite(t_game *game, t_img *sprite,
-			t_render *renderer, t_enemy *enemy);
+void					draw_sprite_pixel(t_sprite_info *info, int i, int j);
+void					draw_enemy_sprite(t_sprite_info *info);
+void					render_enemy_sprite(t_game *game, t_img *sprite,
+							t_render *renderer, t_enemy *enemy);
 
 // ========== WEAPON FUNCTIONS ==========
 // shoot/shoot.c

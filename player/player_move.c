@@ -6,7 +6,7 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 17:44:16 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/20 23:20:06 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/05/27 21:46:02 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,13 @@ int	key_release(int keycode, t_player *player)
 	return (0);
 }
 
+static void	set_weapon(t_player *player, int weapon)
+{
+	player->current_weapon = weapon;
+	if (player->game)
+		player->game->current_weapon = weapon;
+}
+
 int	key_press(int keycode, t_player *player)
 {
 	if (keycode == ESC)
@@ -58,25 +65,12 @@ int	key_press(int keycode, t_player *player)
 	if (keycode == RIGHT)
 		player->right = true;
 	if (keycode == 49)
-	{
-		player->current_weapon = PORTALGUN;
-		if (player->game)
-			player->game->current_weapon = PORTALGUN;
-	}
+		set_weapon(player, PORTALGUN);
 	if (keycode == 50)
-	{
-		player->current_weapon = RAYGUN;
-		if (player->game)
-			player->game->current_weapon = RAYGUN;
-	}
-	// if (keycode == 101)
-	// {
-	// 	try_open_door(??);
-	// }
-	// if (player->current_weapon >= MAX_WEAPONS)
-	//     player->current_weapon = 0;
+		set_weapon(player, RAYGUN);
 	return (0);
 }
+
 int	mouse_move(int x, int y, t_game *game)
 {
 	int		center_x;
@@ -103,7 +97,6 @@ int	mouse_move(int x, int y, t_game *game)
 	return (0);
 }
 
-
 int	is_wall(t_game *game, float x, float y)
 {
 	int	map_x;
@@ -119,72 +112,3 @@ int	is_wall(t_game *game, float x, float y)
 		return (1);
 	return (0);
 }
-
-void	move_player(t_player *player)
-{
-	float	angle_speed = 0.05;
-	float	speed = 10.0;
-	float	new_x;
-	float	new_y;
-	float	strafe_angle;
-
-	// Rotazione
-	if (player->left_rotate)
-		player->angle -= angle_speed;
-	if (player->right_rotate)
-		player->angle += angle_speed;
-	if (player->turn_back)
-		player->angle += M_PI;
-
-	// Normalizzazione angolo
-	while (player->angle < 0)
-		player->angle += 2 * M_PI;
-	while (player->angle >= 2 * M_PI)
-		player->angle -= 2 * M_PI;
-
-	update_camera_vectors(player); // ⚠️ aggiorna dir_ e plane_
-
-	// Avanti
-	if (player->key_up)
-	{
-		new_x = player->x + player->dir_x * speed;
-		new_y = player->y + player->dir_y * speed;
-		if (player->game && is_not_wall(&player->game->map, new_x, player->y))
-			player->x = new_x;
-		if (player->game && is_not_wall(&player->game->map, player->x, new_y))
-			player->y = new_y;
-	}
-	// Indietro
-	if (player->key_down)
-	{
-		new_x = player->x - player->dir_x * speed;
-		new_y = player->y - player->dir_y * speed;
-		if (player->game && is_not_wall(&player->game->map, new_x, player->y))
-			player->x = new_x;
-		if (player->game && is_not_wall(&player->game->map, player->x, new_y))
-			player->y = new_y;
-	}
-	// Strafe a sinistra
-	if (player->key_left)
-	{
-		strafe_angle = player->angle - M_PI / 2;
-		new_x = player->x + cos(strafe_angle) * speed;
-		new_y = player->y + sin(strafe_angle) * speed;
-		if (player->game && is_not_wall(&player->game->map, new_x, player->y))
-			player->x = new_x;
-		if (player->game && is_not_wall(&player->game->map, player->x, new_y))
-			player->y = new_y;
-	}
-	// Strafe a destra
-	if (player->key_right)
-	{
-		strafe_angle = player->angle + M_PI / 2;
-		new_x = player->x + cos(strafe_angle) * speed;
-		new_y = player->y + sin(strafe_angle) * speed;
-		if (player->game && is_not_wall(&player->game->map, new_x, player->y))
-			player->x = new_x;
-		if (player->game && is_not_wall(&player->game->map, player->x, new_y))
-			player->y = new_y;
-	}
-}
-

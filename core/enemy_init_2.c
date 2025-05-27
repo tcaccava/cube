@@ -6,11 +6,11 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 20:37:29 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/26 20:42:09 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/05/27 20:25:06 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube3d.h"
+#include "../cube3d.h"
 
 int	count_enemies_in_map(t_game *game)
 {

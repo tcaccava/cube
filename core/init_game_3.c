@@ -6,11 +6,11 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 22:32:51 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/26 22:33:02 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/05/27 20:25:32 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube3d.h"
+#include "../cube3d.h"
 
 int	init_game_with_4_textures(t_game *game, char *map_file,
 		t_texture_paths *paths)
