@@ -6,7 +6,7 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 23:09:16 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/26 23:09:21 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/05/27 20:14:49 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,7 @@ typedef struct s_enemy
 	int					frame_counter;
 	int					sprite_size;
 	int					death_timer;
+	int					shooting;
 }						t_enemy;
 
 typedef struct s_player
@@ -322,6 +323,38 @@ typedef struct s_texture_paths
 	char				*west;
 }						t_texture_paths;
 
+typedef struct s_enemy_ctx
+{
+	t_enemy				*enemy;
+	t_player			*player;
+	t_map				*map;
+	double				dx;
+	double				dy;
+	double				distance;
+}						t_enemy_ctx;
+
+typedef struct s_los_args
+{
+	double				ex;
+	double				ey;
+	double				px;
+	double				py;
+}						t_los_args;
+
+typedef struct s_sprite_info
+{
+	t_game		*game;
+	t_img		*sprite;
+	t_point		pos;
+	int			size;
+	t_enemy		*enemy;
+}	t_sprite_info;
+
+typedef struct s_vec
+{
+	double	x;
+	double	y;
+}	t_vec;
 // ========== CORE FUNCTIONS ==========
 // core/main.c
 void					init_player(t_player *player);
@@ -494,33 +527,37 @@ void					draw_crosshair(t_game *game);
 
 // ========== ENEMY FUNCTIONS ==========
 // enemy/enemy_core.c
+
 void					update_enemy(t_enemy *enemy, t_player *player,
 							t_map *map);
+
 int						enemy_sees_you(t_enemy *enemy, t_player *player,
 							t_map *map);
-int						line_of_sight(double ex, double ey, double px,
-							double py, t_map *map);
-int						damage_enemy_at_position(t_game *game, int tile_x,
-							int tile_y, int damage);
+int						line_of_sight(t_los_args pos, t_map *map);
+int						damage_enemy_at_position(t_game *game, int tx, int ty,
+							int dmg);
+
 void					update_camera_vectors(t_player *player);
 
 // enemy/enemy_ai.c
-void					idle(t_enemy *e, t_player *p, t_map *m, double dx,
-							double dy, double d);
-void					search(t_enemy *e, t_player *p, t_map *m, double dx,
-							double dy, double d);
-void					shoot(t_enemy *e, t_player *p, t_map *m, double dx,
-							double dy, double d);
-void					melee(t_enemy *e, t_player *p, t_map *m, double dx,
-							double dy, double d);
+void					idle(t_enemy_ctx *ctx);
+void					search(t_enemy_ctx *ctx);
+void					shoot(t_enemy_ctx *ctx);
+void					melee(t_enemy_ctx *ctx);
 void					update_enemy_position_on_map(t_game *game,
 							t_enemy *enemy, double old_x, double old_y);
 
 // enemy/enemy_animation.c
 void					update_death_animation(t_enemy *enemy);
 void					update_enemy_animation(t_enemy *enemy);
-int						load_enemy_animations(t_game *game, t_enemy *enemy);
-int						load_death_animations(t_game *game, t_enemy *enemy);
+void					load_enemy_animations_part1(t_game *game,
+							t_enemy *enemy);
+void					load_enemy_animations_part2(t_game *game,
+							t_enemy *enemy);
+int						load_death_animations_part1(t_game *game,
+							t_enemy *enemy);
+int						load_death_animations_part2(t_game *game,
+							t_enemy *enemy);
 
 // enemy/enemy_render.c
 void					render_enemy(t_game *game, t_enemy *enemy);
@@ -534,11 +571,11 @@ void					setup_enemy_render_params(t_game *game,
 void					render_death_animation(t_game *game, t_enemy *enemy);
 
 // enemy/enemy_sprite.c
-void					draw_enemy_sprite(t_game *game, t_img *sprite,
-							t_point pos, int size, t_enemy *enemy);
-void					draw_sprite_pixel(t_game *game, t_img *sprite,
-							t_point pos, int size, t_enemy *enemy, int i,
-							int j);
+
+void	draw_sprite_pixel(t_sprite_info *info, int i, int j);
+void	draw_enemy_sprite(t_sprite_info *info);
+void	render_enemy_sprite(t_game *game, t_img *sprite,
+			t_render *renderer, t_enemy *enemy);
 
 // ========== WEAPON FUNCTIONS ==========
 // shoot/shoot.c

@@ -1,121 +1,87 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   enemy.c                                            :+:      :+:    :+:   */
+/*   enemy_core.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:39:45 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/22 18:26:15 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/05/27 20:21:17 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cube3d.h"
 
-void update_enemy(t_enemy *enemy, t_player *player, t_map *map)
+static double	get_delta_angle(t_enemy *enemy, t_player *player)
 {
-    double dx = player->x - enemy->x;
-    double dy = player->y - enemy->y;
-    double distance = sqrt(dx * dx + dy * dy);
-    
-    if (enemy->health <= 0)
-    {
-        enemy->state = DEAD;
-        return;
-    }
-    
-    if (enemy->state == IDLE)
-        idle(enemy, player, map, dx, dy, distance);
-    else if (enemy->state == SEARCH)
-        search(enemy, player, map, dx, dy, distance);
-    else if (enemy->state == SHOOT)
-        shoot(enemy, player, map, dx, dy, distance);
-    else if (enemy->state == MELEE)
-        melee(enemy, player, map, dx, dy, distance);
+	t_vec	dir;
+	double	angle_to_player;
+
+	dir.x = player->x - enemy->x;
+	dir.y = player->y - enemy->y;
+	angle_to_player = atan2(dir.y, dir.x);
+	return (normalize_angle(angle_to_player - enemy->angle));
 }
 
-int enemy_sees_you(t_enemy *enemy, t_player *player, t_map *map)
+int	enemy_sees_you(t_enemy *enemy, t_player *player, t_map *map)
 {
-    double dx = player->x - enemy->x;
-    double dy = player->y - enemy->y;
-    double angle_to_player = atan2(dy, dx);
-    double delta_angle = normalize_angle(angle_to_player - enemy->angle);
-    double fov = M_PI;
-    
-    if (fabs(delta_angle) < fov / 2)
-    {
-        if (line_of_sight(enemy->x, enemy->y, player->x, player->y, map))
-            return (1);
-    }
-    return (0);
+	t_los_args	args;
+	double		delta_angle;
+
+	delta_angle = get_delta_angle(enemy, player);
+	if (fabs(delta_angle) < (M_PI / 2))
+	{
+		args.ex = enemy->x;
+		args.ey = enemy->y;
+		args.px = player->x;
+		args.py = player->y;
+		if (line_of_sight(args, map))
+			return (1);
+	}
+	return (0);
 }
 
-int line_of_sight(double ex, double ey, double px, double py, t_map *map)
+static int	check_collision(t_map *map, int map_x, int map_y)
 {
-    double dx = px - ex;
-    double dy = py - ey;
-    double distance = sqrt(dx * dx + dy * dy);
-    double step_x = (dx / distance) * 5.0;
-    double step_y = (dy / distance) * 5.0;
-    double x = ex;
-    double y = ey;
-    double traveled = 0.0;
-    int map_x, map_y;
-    
-    while (traveled < distance)
-    {
-        map_x = (int)(x / TILE_SIZE);
-        map_y = (int)(y / TILE_SIZE);
-        
-        if (map_x < 0 || map_x >= map->width || 
-            map_y < 0 || map_y >= map->height)
-            return (0);
-            
-        if (map->matrix[map_y][map_x] == '1')
-            return (0);
-            
-        x += step_x;
-        y += step_y;
-        traveled += 5.0;
-    }
-    return (1);
+	if (map_x < 0 || map_x >= map->width || map_y < 0 || map_y >= map->height)
+		return (1);
+	if (map->matrix[map_y][map_x] == '1')
+		return (1);
+	return (0);
 }
 
-int damage_enemy_at_position(t_game *game, int tile_x, int tile_y, int damage)
+static int	is_path_blocked(t_map *map, double x, double y)
 {
-    int i = 0;
-    
-    while (i < game->num_enemies)
-    {
-        t_enemy *enemy = &game->enemies[i];
-        int enemy_tile_x = (int)(enemy->x / TILE_SIZE);
-        int enemy_tile_y = (int)(enemy->y / TILE_SIZE);
+	int	map_x;
+	int	map_y;
 
-        if (enemy_tile_x == tile_x && enemy_tile_y == tile_y && enemy->active)
-        {
-            enemy->health -= damage;
-            if (enemy->health <= 0)
-            {
-                enemy->death_timer = 300;
-                enemy->animation.current_frame = 0;
-                enemy->animation.frame_counter = 0;
-                enemy->state = DEAD;
-                return (1);
-            }
-            else
-                return (0);
-        }
-        i++;
-    }
-    return (0);
+	map_x = (int)(x / TILE_SIZE);
+	map_y = (int)(y / TILE_SIZE);
+	return (check_collision(map, map_x, map_y));
 }
 
-void update_camera_vectors(t_player *player)
+int	line_of_sight(t_los_args pos, t_map *map)
 {
-    double fov_half = player->fov / 2.0;
+	t_vec	dir;
+	t_vec	curr;
+	double	dist;
+	double	traveled;
 
-    player->dir_x = cos(player->angle);
-    player->dir_y = sin(player->angle);
-    player->plane_x = -sin(player->angle) * tan(fov_half);
-    player->plane_y = cos(player->angle) * tan(fov_half);
+	dir.x = pos.px - pos.ex;
+	dir.y = pos.py - pos.ey;
+	dist = sqrt(dir.x * dir.x + dir.y * dir.y);
+	dir.x = dir.x / dist * 5.0;
+	dir.y = dir.y / dist * 5.0;
+	curr.x = pos.ex;
+	curr.y = pos.ey;
+	traveled = 0.0;
+	while (traveled < dist)
+	{
+		if (is_path_blocked(map, curr.x, curr.y))
+			return (0);
+		curr.x += dir.x;
+		curr.y += dir.y;
+		traveled += 5.0;
+	}
+	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 22:23:45 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/22 19:20:54 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/05/27 19:02:35 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,39 +156,3 @@ int mouse_button(int button, int x, int y, t_game *game)
 
     return (0);
 }
-
-// int damage_enemy_at_position(t_game *game, int tile_x, int tile_y, int damage)
-// {
-//     int i = 0;
-    
-//     while (i < game->num_enemies)
-//     {
-//         t_enemy *enemy = &game->enemies[i];
-        
-//         // AVANT : comparaison directe car enemy était en cellules
-//         // int enemy_tile_x = (int)(enemy->x);
-//         // int enemy_tile_y = (int)(enemy->y);
-        
-//         // APRÈS : convertir pixels → cellules
-//         int enemy_tile_x = (int)(enemy->x / TILE_SIZE);
-//         int enemy_tile_y = (int)(enemy->y / TILE_SIZE);
-
-//         if (enemy_tile_x == tile_x && enemy_tile_y == tile_y && enemy->active)
-//         {
-//             enemy->health -= damage;
-//             if (enemy->health <= 0)
-//             {
-//                 //enemy->active = 0;
-//                 enemy->death_timer = 50;
-//                 enemy->animation.current_frame = 0;
-//                 enemy->animation.frame_counter = 0;
-//                 enemy->state = DEAD;
-//                 return (1); // Ennemi mort
-//             }
-//             else
-//                 return (0);
-//         }
-//         i++;
-//     }
-//     return (0);
-// }
