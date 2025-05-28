@@ -6,7 +6,7 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 23:09:16 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/27 23:39:04 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/05/28 20:03:25 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,10 @@
 # define TILE_SIZE 64
 # define DISPLAY_WIDTH 1920
 # define DISPLAY_HEIGHT 1080
-# define FOV (M_PI / 3)
+# define FOV 1.0471975512
 # define STEP_SIZE 0.05
 
-# ifndef ENEMY_RADIUS
-#  define ENEMY_RADIUS (TILE_SIZE * 0.3)
-# endif
+# define ENEMY_RADIUS 19.2
 
 # define WEAPON_NEUTRE 0
 # define WEAPON_PREFIRE 1
@@ -371,6 +369,21 @@ typedef struct s_ray_calc
 	t_intersect			*h;
 	int					column_x;
 }						t_ray_calc;
+
+typedef struct s_crosshair_params
+{
+	int					center_x;
+	int					center_y;
+	int					size;
+	unsigned int		color;
+}						t_crosshair_params;
+
+typedef struct s_cell_info
+{
+	t_game				*game;
+	t_point				map;
+	t_point				cell;
+}						t_cell_info;
 // ========== CORE FUNCTIONS ==========
 // core/main.c
 void					init_player(t_player *player);
@@ -480,8 +493,8 @@ int						calc_wall_height(double corrected_dist);
 void					store_ray_info(t_game *game, int column_x,
 							t_ray_data *data);
 void					select_ray_hit(t_game *game, t_ray_calc *calc);
-void	cast_intersections(t_game *game, t_intersect *v, t_intersect *h);
-
+void					cast_intersections(t_game *game, t_intersect *v,
+							t_intersect *h);
 
 // ========== RENDER FUNCTIONS ==========
 // render/render_core.c
@@ -501,11 +514,21 @@ void					render_wall_portal(t_game *game, int column_x,
 							t_render *renderer, t_ray *ray);
 void					render_wall_shooted(t_game *game, int column_x,
 							t_render *renderer, t_ray *ray);
+void					render_wall_portal_pixel(t_game *game, int column_x,
+							t_render *renderer, int CY);
+void					render_wall_shooted_pixel(t_game *game, int column_x,
+							t_render *renderer, int CY);
+void					render_door_pixel(t_game *game, int column_x,
+							t_render *renderer, int CY);
+void					render_door_shoot(t_game *game, int column_x,
+							t_render *renderer, t_ray *ray);
+void					render_door_shooted_pixel(t_game *game, int column_x,
+							t_render *renderer, int CY);
 
 // render/render_weapons.c
 void					update_weapon_animation(t_game *game);
 void					draw_weapon_pixel(t_game *game, t_img *weapon,
-							t_render *renderer, int tex_x, int tex_y);
+							t_render *renderer, t_point tex);
 void					render_weapon(t_game *game);
 
 // render/render_floor.c
@@ -522,8 +545,9 @@ void					render_door_shooted(t_game *game, int column_x,
 // ui/minimap.c
 void					init_minimap(t_game *game);
 void					draw_minimap_background(t_game *game);
-void					draw_minimap_cell(t_game *game, int map_x, int map_y,
-							int screen_x, int screen_y);
+
+void					draw_minimap_cell(t_cell_info info);
+
 void					draw_minimap_cells(t_game *game);
 void					minimap(t_game *game);
 
@@ -541,9 +565,8 @@ void					draw_health_bar_fill(t_game *game);
 void					draw_health_bar(t_game *game);
 
 // ui/crosshair.c
-void					draw_crosshair_line(t_game *game, int center_x,
-							int center_y, int size, unsigned int color,
-							int is_vertical);
+void					draw_crosshair_line(t_game *game,
+							t_crosshair_params *params, int is_vertical);
 void					draw_crosshair(t_game *game);
 
 // ========== ENEMY FUNCTIONS ==========
@@ -602,6 +625,14 @@ void					render_enemy_sprite(t_game *game, t_img *sprite,
 // shoot/shoot.c
 void					calculate_shoot(t_game *game);
 int						mouse_button(int button, int x, int y, t_game *game);
+void					handle_portal_placement(t_game *game,
+							t_ray *center_ray);
+int						check_enemy_hit(t_game *game, int i, double ray_dir_x,
+							double ray_dir_y);
+void					damage_hit_enemy(t_game *game, int enemy_index);
+int						handle_raygun_enemies(t_game *game, double ray_dir_x,
+							double ray_dir_y);
+void					handle_raygun_walls(t_game *game, t_ray *center_ray);
 
 // ========== PORTAL FUNCTIONS ==========
 // portal/portal.c
