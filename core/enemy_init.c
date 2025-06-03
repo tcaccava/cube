@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   enemy_init.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/26 20:07:37 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/27 20:25:12 by tcaccava         ###   ########.fr       */
+/*   Created: 2025/06/03 14:33:14 by abkhefif          #+#    #+#             */
+/*   Updated: 2025/06/03 14:33:15 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cube3d.h"
+#include "cube3d.h"
 
 int	load_shared_shoot_sprites(t_game *game, t_img shared_sprites[2])
 {

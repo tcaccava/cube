@@ -3,14 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   game_loop_2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/26 20:44:54 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/27 20:25:17 by tcaccava         ###   ########.fr       */
+/*   Created: 2025/06/03 14:33:16 by abkhefif          #+#    #+#             */
+/*   Updated: 2025/06/03 14:33:17 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cube3d.h"
+#include "cube3d.h"
+
+int	close_window(void *param)
+{
+	(void)param;
+	exit(0);
+	return (0);
+}
 
 int	loop_game(t_game *game)
 {

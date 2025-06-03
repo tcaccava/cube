@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   texture_loader.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/26 20:59:35 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/27 20:25:53 by tcaccava         ###   ########.fr       */
+/*   Created: 2025/06/03 14:33:30 by abkhefif          #+#    #+#             */
+/*   Updated: 2025/06/03 14:35:44 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cube3d.h"
+#include "cube3d.h"
 
 int	load_basic_textures(t_game *game)
 {
@@ -38,35 +38,6 @@ int	load_basic_textures(t_game *game)
 			&game->map.floor_texture.bits_per_pixel,
 			&game->map.floor_texture.line_length,
 			&game->map.floor_texture.endian);
-	return (1);
-}
-
-int	load_door_textures(t_game *game)
-{
-	int	width;
-	int	height;
-
-	game->map.door_texture.ptr = mlx_xpm_file_to_image(game->mlx,
-			"./texture/door.xpm", &width, &height);
-	if (!game->map.door_texture.ptr)
-		return (0);
-	game->map.door_texture.width = width;
-	game->map.door_texture.height = height;
-	game->map.door_texture.addr = mlx_get_data_addr(game->map.door_texture.ptr,
-			&game->map.door_texture.bits_per_pixel,
-			&game->map.door_texture.line_length,
-			&game->map.door_texture.endian);
-	game->map.door_shooted_texture.ptr = mlx_xpm_file_to_image(game->mlx,
-			"./texture/door_shooted.xpm", &width, &height);
-	if (!game->map.door_shooted_texture.ptr)
-		return (0);
-	game->map.door_shooted_texture.width = width;
-	game->map.door_shooted_texture.height = height;
-	game->map.door_shooted_texture.addr = mlx_get_data_addr (
-			game->map.door_shooted_texture.ptr,
-			&game->map.door_shooted_texture.bits_per_pixel,
-			&game->map.door_shooted_texture.line_length,
-			&game->map.door_shooted_texture.endian);
 	return (1);
 }
 
@@ -103,9 +74,15 @@ static int	load_texture(t_game *game, t_img *tex, char *path)
 	int	width;
 	int	height;
 
+	if (!game->mlx)
+	{
+		return (0);
+	}
 	tex->ptr = mlx_xpm_file_to_image(game->mlx, path, &width, &height);
 	if (!tex->ptr)
+	{
 		return (0);
+	}
 	tex->width = width;
 	tex->height = height;
 	tex->addr = mlx_get_data_addr(tex->ptr, &tex->bits_per_pixel,

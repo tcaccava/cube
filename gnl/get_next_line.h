@@ -29,5 +29,11 @@ void	*ft_calloc(size_t count, size_t size);
 char	*read_line(int fd, char *temp);
 char	*get_next_line(int fd);
 char	*ft_strdup(const char *s);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
+char	*ft_strdup(const char *s);
+void	*ft_memset(void *s, int c, size_t n);
+char	*ft_strchr(const char *s, int c);
+int		ft_isdigit(int c);
+int		ft_atoi(const char *nptr);
 
 #endif

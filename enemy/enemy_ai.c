@@ -3,119 +3,119 @@
 /*                                                        :::      ::::::::   */
 /*   enemy_ai.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/27 17:02:41 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/06/03 12:24:18 by tcaccava         ###   ########.fr       */
+/*   Created: 2025/06/03 14:32:09 by abkhefif          #+#    #+#             */
+/*   Updated: 2025/06/03 14:32:10 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cube3d.h"
 
-static void	move_idle(t_enemy *e, t_map *m)
+void	idle(t_enemy *e, t_player *p, t_map *m)
 {
-	double	speed;
 	double	move_x;
 	double	move_y;
-	int		next_x;
-	int		next_y;
+	double	speed;
+	int		next_pos[2];
 
+	(void)p;
 	speed = 1.5;
 	move_x = cos(e->angle) * speed;
 	move_y = sin(e->angle) * speed;
-	next_x = (int)((e->x + move_x) / TILE_SIZE);
-	next_y = (int)((e->y + move_y) / TILE_SIZE);
-	if (next_x >= 0 && next_x < m->width && next_y >= 0 && next_y < m->height
-		&& m->matrix[next_y][next_x] != '1')
+	next_pos[0] = (int)((e->x + move_x) / TILE_SIZE);
+	next_pos[1] = (int)((e->y + move_y) / TILE_SIZE);
+	if (next_pos[0] >= 0 && next_pos[0] < m->width && next_pos[1]
+		>= 0 && next_pos[1] < m->height && m->matrix[next_pos[1]]
+		[next_pos[0]] != '1')
 	{
 		e->x += move_x;
 		e->y += move_y;
 	}
 	else
-	{
-		e->angle += ((rand() % 60) - 30) * M_PI / 180;
-		e->angle = normalize_angle(e->angle);
-	}
+		apply_random_rotation(e);
+	if (enemy_sees_you(e, p, m))
+		set_search_state(e);
 }
 
-void	idle(t_enemy_ctx *ctx)
+void	search(t_enemy *e, t_player *p, t_map *m)
 {
-	move_idle(ctx->enemy, ctx->map);
-	if (enemy_sees_you(ctx->enemy, ctx->player, ctx->map))
+	double	dx;
+	double	dy;
+	double	d;
+	double	distance_in_tiles;
+
+	dx = p->x - e->x;
+	dy = p->y - e->y;
+	d = sqrt(dx * dx + dy * dy);
+	distance_in_tiles = d / TILE_SIZE;
+	if (!enemy_sees_you(e, p, m))
 	{
-		ctx->enemy->state = SEARCH;
-		ctx->enemy->sees_player = 1;
+		e->state = IDLE;
+		e->sees_player = 0;
+		return ;
 	}
+	if (distance_in_tiles < 1.5)
+		set_melee_state(e);
+	else if (distance_in_tiles < 6)
+		set_shoot_state(e);
+	else
+		move_towards_player(e, p, m, atan2(dy, dx));
 }
 
-void	search(t_enemy_ctx *ctx)
+static void	handle_shoot_distance(t_enemy *e, t_player *p,
+		double distance_in_tiles, t_point direction)
 {
-	t_enemy	*e;
-	double	move_x;
-	double	move_y;
-	int		next_x;
-	int		next_y;
-
-	e = ctx->enemy;
-	move_x = ctx->dx / ctx->distance * 2.0;
-	move_y = ctx->dy / ctx->distance * 2.0;
-	next_x = (int)((e->x + move_x) / TILE_SIZE);
-	next_y = (int)((e->y + move_y) / TILE_SIZE);
-	if (next_x >= 0 && next_x < ctx->map->width && next_y >= 0
-		&& next_y < ctx->map->height && ctx->map->matrix[next_y][next_x] != '1')
-	{
-		e->x += move_x;
-		e->y += move_y;
-	}
-	e->angle = atan2(ctx->dy, ctx->dx);
-	if (ctx->distance < TILE_SIZE * 1.5)
-		e->state = MELEE;
-	else if (ctx->distance < TILE_SIZE * 6.0)
-		e->state = SHOOT;
-}
-
-void	shoot(t_enemy_ctx *ctx)
-{
-	t_enemy *e;
-
-	e = ctx->enemy;
-	e->angle = atan2(ctx->dy, ctx->dx);
-	if (ctx->distance > TILE_SIZE * 6.0)
+	if (distance_in_tiles >= 6.0)
 	{
 		e->state = SEARCH;
 		return ;
 	}
-	if (e->cooldown <= 0)
+	if (distance_in_tiles < 1.5)
+		set_melee_state(e);
+	else
 	{
-		e->cooldown = 60;
-		e->shooting = 1;
-		if (enemy_sees_you(e, ctx->player, ctx->map))
-			ctx->player->health -= 15;
-		else
-		{
-			e->cooldown--;
-			if (e->cooldown == 30)
-				e->shooting = 0;
-		}
+		e->angle = atan2(direction.y, direction.x);
+		handle_shoot_cooldown(e, p);
 	}
 }
 
-	void melee(t_enemy_ctx * ctx)
-	{
-		t_enemy *e;
+void	shoot(t_enemy *e, t_player *p, t_map *m)
+{
+	double	dx;
+	double	dy;
+	double	d;
+	double	distance_in_tiles;
 
-		e = ctx->enemy;
-		e->angle = atan2(ctx->dy, ctx->dx);
-		if (ctx->distance > TILE_SIZE * 2.0)
-		{
-			e->state = SEARCH;
-			return ;
-		}
-		if (e->cooldown <= 0)
-		{
-			ctx->player->health -= 20;
-			e->cooldown = 90;
-		}
-		else
-			e->cooldown--;
+	dx = p->x - e->x;
+	dy = p->y - e->y;
+	d = sqrt(dx * dx + dy * dy);
+	distance_in_tiles = d / TILE_SIZE;
+	if (!enemy_sees_you(e, p, m))
+	{
+		e->state = SEARCH;
+		e->sees_player = 0;
+		return ;
 	}
+	handle_shoot_distance(e, p, distance_in_tiles, (t_point){dx, dy});
+}
+
+void	melee(t_enemy *e, t_player *p, t_map *m)
+{
+	double	dx;
+	double	dy;
+	double	d;
+	double	distance_in_tiles;
+
+	dx = p->x - e->x;
+	dy = p->y - e->y;
+	d = sqrt(dx * dx + dy * dy);
+	distance_in_tiles = d / TILE_SIZE;
+	if (!enemy_sees_you(e, p, m) || distance_in_tiles >= 1.5)
+	{
+		e->state = SEARCH;
+		return ;
+	}
+	e->angle = atan2(dy, dx);
+	handle_melee_cooldown(e, p);
+}

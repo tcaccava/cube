@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_validator.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/27 21:32:09 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/27 21:33:56 by tcaccava         ###   ########.fr       */
+/*   Created: 2025/06/03 14:20:55 by abkhefif          #+#    #+#             */
+/*   Updated: 2025/06/03 14:20:56 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	check_borders(t_map *map)
 			}
 		}
 		else if ((map->matrix[y][0] != '1') || (map->matrix[y][map->width
-				- 1] != '1'))
+			- 1] != '1'))
 			return (printf("Error: Invalid Map"));
 		y++;
 	}
@@ -76,8 +76,8 @@ int	check_playable_spaces(t_map *map)
 		{
 			if (is_valid_playable_char(map->matrix[y][x]))
 			{
-				if (y == 0 || y == map->height - 1 || x == 0 || x == map->width
-					- 1)
+				if (y == 0 || y == map->height - 1 || x == 0
+					|| x == map->width - 1)
 					return (printf("Error: Invalid Map"));
 				if (!check_surrounding_spaces(map, x, y))
 					return (printf("Error: Invalid Map"));

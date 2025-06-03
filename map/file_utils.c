@@ -3,14 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   file_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/27 20:28:56 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/27 21:18:55 by tcaccava         ###   ########.fr       */
+/*   Created: 2025/06/03 14:20:49 by abkhefif          #+#    #+#             */
+/*   Updated: 2025/06/03 14:20:50 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cube3d.h"
+
+int	check_file_cub(char *file_path)
+{
+	int	i;
+
+	i = ft_strlen(file_path);
+	if (i < 4)
+		return (0);
+	if (file_path[i - 4] == '.' && file_path[i - 3] == 'c'
+		&& file_path[i - 2] == 'u' && file_path[i - 1] == 'b')
+		return (1);
+	return (0);
+}
 
 int	count_file_lines(char *file_path)
 {

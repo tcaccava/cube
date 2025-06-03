@@ -3,72 +3,89 @@
 /*                                                        :::      ::::::::   */
 /*   enemy_core_2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/27 18:37:07 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/27 20:19:57 by tcaccava         ###   ########.fr       */
+/*   Created: 2025/06/03 14:32:17 by abkhefif          #+#    #+#             */
+/*   Updated: 2025/06/03 14:32:18 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cube3d.h"
+#include "cube3d.h"
 
-void	update_camera_vectors(t_player *player)
+static void	init_los_data(t_los_data *d, t_point enemy_pos,
+		t_point player_pos)
 {
-	double	fov_half;
+	double	dx;
+	double	dy;
 
-	fov_half = player->fov / 2.0;
-	player->dir_x = cos(player->angle);
-	player->dir_y = sin(player->angle);
-	player->plane_x = -sin(player->angle) * tan(fov_half);
-	player->plane_y = cos(player->angle) * tan(fov_half);
+	dx = player_pos.x - enemy_pos.x;
+	dy = player_pos.y - enemy_pos.y;
+	d->distance = sqrt(dx * dx + dy * dy);
+	d->step_x = (dx / d->distance) * 5.0;
+	d->step_y = (dy / d->distance) * 5.0;
+	d->x = enemy_pos.x;
+	d->y = enemy_pos.y;
+	d->traveled = 0.0;
 }
 
-void	update_enemy(t_enemy *enemy, t_player *player, t_map *map)
+static int	check_wall_hit(t_los_data *d, t_map *map)
 {
-	t_enemy_ctx	ctx;
+	int	map_x;
+	int	map_y;
 
-	ctx.enemy = enemy;
-	ctx.player = player;
-	ctx.map = map;
-	ctx.dx = player->x - enemy->x;
-	ctx.dy = player->y - enemy->y;
-	ctx.distance = sqrt(ctx.dx * ctx.dx + ctx.dy * ctx.dy);
-	if (enemy->health <= 0)
+	map_x = (int)(d->x / TILE_SIZE);
+	map_y = (int)(d->y / TILE_SIZE);
+	if (map_x < 0 || map_x >= map->width || map_y < 0 || map_y >= map->height)
+		return (1);
+	return (map->matrix[map_y][map_x] == '1');
+}
+
+int	line_of_sight(t_point enemy_pos, t_point player_pos, t_map *map)
+{
+	t_los_data	d;
+
+	init_los_data(&d, enemy_pos, player_pos);
+	while (d.traveled < d.distance)
 	{
-		enemy->state = DEAD;
-		return ;
+		if (check_wall_hit(&d, map))
+			return (0);
+		d.x += d.step_x;
+		d.y += d.step_y;
+		d.traveled += 5.0;
 	}
-	if (enemy->state == IDLE)
-		idle(&ctx);
-	else if (enemy->state == SEARCH)
-		search(&ctx);
-	else if (enemy->state == SHOOT)
-		shoot(&ctx);
-	else if (enemy->state == MELEE)
-		melee(&ctx);
+	return (1);
 }
 
-int	damage_enemy_at_position(t_game *game, int tx, int ty, int dmg)
+static void	handle_enemy_death(t_enemy *enemy)
 {
-	t_enemy	*e;
-	int		i;
+	enemy->death_timer = 300;
+	enemy->animation.current_frame = 0;
+	enemy->animation.frame_counter = 0;
+	enemy->state = DEAD;
+}
+
+int	damage_enemy_at_position(t_game *game, int tile_x, int tile_y, int damage)
+{
+	int			i;
+	t_enemy		*enemy;
+	int			enemy_tile_x;
+	int			enemy_tile_y;
 
 	i = 0;
 	while (i < game->num_enemies)
 	{
-		e = &game->enemies[i];
-		if ((int)(e->x / TILE_SIZE) == tx && (int)(e->y / TILE_SIZE) == ty
-			&& e->active)
+		enemy = &game->enemies[i];
+		enemy_tile_x = (int)(enemy->x / TILE_SIZE);
+		enemy_tile_y = (int)(enemy->y / TILE_SIZE);
+		if (enemy_tile_x == tile_x && enemy_tile_y == tile_y && enemy->active)
 		{
-			e->health -= dmg;
-			if (e->health <= 0)
+			enemy->health -= damage;
+			if (enemy->health <= 0)
 			{
-				e->death_timer = 300;
-				e->animation.current_frame = 0;
-				e->animation.frame_counter = 0;
-				e->state = DEAD;
+				handle_enemy_death(enemy);
+				return (1);
 			}
-			return (1);
+			return (0);
 		}
 		i++;
 	}

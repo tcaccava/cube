@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   enemy_animation.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/27 20:03:40 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/27 20:03:44 by tcaccava         ###   ########.fr       */
+/*   Created: 2025/06/03 14:32:15 by abkhefif          #+#    #+#             */
+/*   Updated: 2025/06/03 14:32:16 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,17 @@ void	update_death_animation(t_enemy *enemy)
 		if (enemy->animation.current_frame >= 3)
 			enemy->animation.current_frame = 2;
 		enemy->animation.frame_counter = 0;
+		printf("Death progression: frame %d\n", enemy->animation.current_frame);
 	}
 }
 
-static void	advance_animation(t_enemy *enemy)
+static void	animate_standard_frames(t_enemy *enemy)
 {
 	enemy->animation.frame_counter++;
 	if (enemy->animation.frame_counter >= ANIMATION_SPEED)
 	{
-		enemy->animation.current_frame = (enemy->animation.current_frame + 1)
-			% 2;
+		enemy->animation.current_frame = (
+				enemy->animation.current_frame + 1) % 2;
 		enemy->animation.frame_counter = 0;
 	}
 }
@@ -50,7 +51,7 @@ void	update_enemy_animation(t_enemy *enemy)
 	if (!enemy->active)
 		return ;
 	if (enemy->state == DEAD)
-		return (update_death_animation(enemy), (void)0);
-	if (enemy->state == SEARCH || enemy->state == IDLE || enemy->state == SHOOT)
-		advance_animation(enemy);
+		update_death_animation(enemy);
+	else if (enemy->state != MELEE)
+		animate_standard_frames(enemy);
 }

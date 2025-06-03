@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   texture_loader_2.c                                 :+:      :+:    :+:   */
+/*   door_utils_2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/03 14:33:28 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:33:29 by abkhefif         ###   ########.fr       */
+/*   Created: 2025/06/03 14:32:56 by abkhefif          #+#    #+#             */
+/*   Updated: 2025/06/03 14:32:57 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cube3d.h"
 
-int	load_all_textures(t_game *game)
+void	apply_damage_effect(unsigned int color, unsigned int *damaged_color)
 {
-	if (!load_basic_textures(game))
-		return (0);
-	if (!load_door_textures(game))
-		return (0);
-	if (!load_special_textures(game))
-		return (0);
-	return (1);
+	int	red;
+	int	green;
+	int	blue;
+
+	red = (color >> 16) & 0xFF;
+	green = (color >> 8) & 0xFF;
+	blue = color & 0xFF;
+	red = (int)(red * 0.7);
+	green = (int)(green * 0.7);
+	blue = (int)(blue * 0.7);
+	*damaged_color = (red << 16) | (green << 8) | blue;
 }

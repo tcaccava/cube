@@ -3,85 +3,61 @@
 /*                                                        :::      ::::::::   */
 /*   enemy_core.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/19 17:39:45 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/27 20:21:17 by tcaccava         ###   ########.fr       */
+/*   Created: 2025/06/03 14:32:19 by abkhefif          #+#    #+#             */
+/*   Updated: 2025/06/03 14:32:20 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cube3d.h"
 
-static double	get_delta_angle(t_enemy *enemy, t_player *player)
+void	update_enemy(t_enemy *enemy, t_player *player, t_map *map)
 {
-	t_vec	dir;
-	double	angle_to_player;
-
-	dir.x = player->x - enemy->x;
-	dir.y = player->y - enemy->y;
-	angle_to_player = atan2(dir.y, dir.x);
-	return (normalize_angle(angle_to_player - enemy->angle));
+	if (enemy->health <= 0)
+	{
+		enemy->state = DEAD;
+		return ;
+	}
+	if (enemy->state == IDLE)
+		idle(enemy, player, map);
+	else if (enemy->state == SEARCH)
+		search(enemy, player, map);
+	else if (enemy->state == SHOOT)
+		shoot(enemy, player, map);
+	else if (enemy->state == MELEE)
+		melee(enemy, player, map);
 }
 
 int	enemy_sees_you(t_enemy *enemy, t_player *player, t_map *map)
 {
-	t_los_args	args;
-	double		delta_angle;
+	double	dx;
+	double	dy;
+	double	angle_to_player;
+	double	delta_angle;
+	double	fov;
 
-	delta_angle = get_delta_angle(enemy, player);
-	if (fabs(delta_angle) < (M_PI / 2))
+	dx = player->x - enemy->x;
+	dy = player->y - enemy->y;
+	angle_to_player = atan2(dy, dx);
+	delta_angle = normalize_angle(angle_to_player - enemy->angle);
+	fov = M_PI;
+	if (fabs(delta_angle) < fov / 2)
 	{
-		args.ex = enemy->x;
-		args.ey = enemy->y;
-		args.px = player->x;
-		args.py = player->y;
-		if (line_of_sight(args, map))
+		if (line_of_sight((t_point){enemy->x, enemy->y},
+			(t_point){player->x, player->y}, map))
 			return (1);
 	}
 	return (0);
 }
 
-static int	check_collision(t_map *map, int map_x, int map_y)
+void	update_camera_vectors(t_player *player)
 {
-	if (map_x < 0 || map_x >= map->width || map_y < 0 || map_y >= map->height)
-		return (1);
-	if (map->matrix[map_y][map_x] == '1')
-		return (1);
-	return (0);
-}
+	double	fov_half;
 
-static int	is_path_blocked(t_map *map, double x, double y)
-{
-	int	map_x;
-	int	map_y;
-
-	map_x = (int)(x / TILE_SIZE);
-	map_y = (int)(y / TILE_SIZE);
-	return (check_collision(map, map_x, map_y));
-}
-
-int	line_of_sight(t_los_args pos, t_map *map)
-{
-	t_vec	dir;
-	t_vec	curr;
-	double	dist;
-	double	traveled;
-
-	dir.x = pos.px - pos.ex;
-	dir.y = pos.py - pos.ey;
-	dist = sqrt(dir.x * dir.x + dir.y * dir.y);
-	dir.x = dir.x / dist * 5.0;
-	dir.y = dir.y / dist * 5.0;
-	curr.x = pos.ex;
-	curr.y = pos.ey;
-	traveled = 0.0;
-	while (traveled < dist)
-	{
-		if (is_path_blocked(map, curr.x, curr.y))
-			return (0);
-		curr.x += dir.x;
-		curr.y += dir.y;
-		traveled += 5.0;
-	}
-	return (1);
+	fov_half = player->fov / 2.0;
+	player->dir_x = cos(player->angle);
+	player->dir_y = sin(player->angle);
+	player->plane_x = -sin(player->angle) * tan(fov_half);
+	player->plane_y = cos(player->angle) * tan(fov_half);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_reader.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/27 21:30:58 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/27 21:31:55 by tcaccava         ###   ########.fr       */
+/*   Created: 2025/06/03 14:20:51 by abkhefif          #+#    #+#             */
+/*   Updated: 2025/06/03 14:20:52 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	read_map_lines(char *file_path, t_game *game)
 	return (1);
 }
 
-int	set_map_dimension(t_game *game, int line_count)
+int	set_map_dimensions(t_game *game, int line_count)
 {
 	game->map.height = line_count;
 	game->map.width = calculate_map_width(game);

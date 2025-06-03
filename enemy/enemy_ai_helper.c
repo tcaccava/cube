@@ -1,24 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   texture_loader_2.c                                 :+:      :+:    :+:   */
+/*   enemy_ai_helper.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/03 14:33:28 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:33:29 by abkhefif         ###   ########.fr       */
+/*   Created: 2025/06/03 14:32:05 by abkhefif          #+#    #+#             */
+/*   Updated: 2025/06/03 14:32:06 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube3d.h"
+#include "../cube3d.h"
 
-int	load_all_textures(t_game *game)
+#include "../cube3d.h"
+
+void	handle_shoot_cooldown(t_enemy *e, t_player *p)
 {
-	if (!load_basic_textures(game))
-		return (0);
-	if (!load_door_textures(game))
-		return (0);
-	if (!load_special_textures(game))
-		return (0);
-	return (1);
+	if (e->cooldown <= 0)
+	{
+		p->health -= 10;
+		e->cooldown = 180;
+	}
+	else
+		e->cooldown--;
+}
+
+void	handle_melee_cooldown(t_enemy *e, t_player *p)
+{
+	if (e->cooldown <= 0)
+	{
+		p->health -= 25;
+		e->cooldown = 90;
+	}
+	else
+		e->cooldown--;
 }
