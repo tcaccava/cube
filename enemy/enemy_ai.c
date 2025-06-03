@@ -6,7 +6,7 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 17:02:41 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/05/27 19:32:01 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/06/03 12:24:18 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	search(t_enemy_ctx *ctx)
 
 void	shoot(t_enemy_ctx *ctx)
 {
-	t_enemy	*e;
+	t_enemy *e;
 
 	e = ctx->enemy;
 	e->angle = atan2(ctx->dy, ctx->dx);
@@ -89,31 +89,33 @@ void	shoot(t_enemy_ctx *ctx)
 	{
 		e->cooldown = 60;
 		e->shooting = 1;
-	}
-	else
-	{
-		e->cooldown--;
-		if (e->cooldown == 30)
-			e->shooting = 0;
+		if (enemy_sees_you(e, ctx->player, ctx->map))
+			ctx->player->health -= 15;
+		else
+		{
+			e->cooldown--;
+			if (e->cooldown == 30)
+				e->shooting = 0;
+		}
 	}
 }
 
-void	melee(t_enemy_ctx *ctx)
-{
-	t_enemy	*e;
+	void melee(t_enemy_ctx * ctx)
+	{
+		t_enemy *e;
 
-	e = ctx->enemy;
-	e->angle = atan2(ctx->dy, ctx->dx);
-	if (ctx->distance > TILE_SIZE * 2.0)
-	{
-		e->state = SEARCH;
-		return ;
+		e = ctx->enemy;
+		e->angle = atan2(ctx->dy, ctx->dx);
+		if (ctx->distance > TILE_SIZE * 2.0)
+		{
+			e->state = SEARCH;
+			return ;
+		}
+		if (e->cooldown <= 0)
+		{
+			ctx->player->health -= 20;
+			e->cooldown = 90;
+		}
+		else
+			e->cooldown--;
 	}
-	if (e->cooldown <= 0)
-	{
-		ctx->player->health -= 20;
-		e->cooldown = 90;
-	}
-	else
-		e->cooldown--;
-}
