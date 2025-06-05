@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   enemy_sprite_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:32:27 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:32:28 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/05 20:52:03 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@ int	setup_death_render(t_game *game, t_enemy *enemy, t_render *renderer)
 	if (renderer->floor_y <= 0.2f)
 		return (0);
 	calculate_enemy_screen_pos(game, renderer);
+	renderer->sprite_size = renderer->sprite_size * 0.6;
+	if (renderer->sprite_size < 8)
+		renderer->sprite_size = 8;
 	return (1);
 }
 
