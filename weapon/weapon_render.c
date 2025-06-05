@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:15:34 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:15:35 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/04 16:47:15 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ void	render_weapon(t_game *game)
 	t_render	renderer;
 	t_img		*weapon;
 
-	if (game->map.north.ptr != NULL)
-		return ;
 	weapon = get_current_weapon_sprite(game);
 	if (!weapon)
 		return ;

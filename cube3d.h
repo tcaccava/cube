@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 23:09:16 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/06/03 14:37:07 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/04 16:30:07 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@
 # define ANIMATION_SPEED 6
 
 // ========== STRUCTURES ==========
+
+
 
 typedef struct s_texture_paths
 {
@@ -1114,13 +1116,21 @@ void	print_death_debug(t_enemy *enemy, t_render *renderer);
 
 double	calculate_distance_to_weapon(t_game *game, t_weapon_pickup *weapon);
 
-int	parse_cub_file(char *filename, t_game *game);
 int	process_line(char *line, t_scene_data *scene, t_game *game);
 int	parse_texture(char *path_str, char **texture_path);
 int	parse_color(char *color_str, int *color);
 int	add_map_line(char *line, t_game *game, t_scene_data *scene);
 int	validate_and_load_scene(t_scene_data *scene, t_game *game);
 
+
+int finalize_parsing(t_scene_data *scene, t_game *game);
+void	clean_line_ending(char *line);
+int add_map_line(char *line, t_game *game, t_scene_data *scene);
+int process_line(char *line , t_scene_data *scene, t_game *game);
+int parse_cub_file(char *filename, t_game *game);
+int parse_texture(char *path_str, char **texture_path);
+int parse_color(char *color_str, int *color);
+int	ft_isdigit(int c);
 
 
 #endif

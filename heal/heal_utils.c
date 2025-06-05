@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:21:17 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:21:18 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/04 17:01:40 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	init_healgun_animation(t_game *game)
 	game->player.healgun_anim_frame = 0;
 	game->player.healgun_anim_timer = 10;
 	game->player.healgun_heal_applied = 0;
-	printf("💉 Animation Heal Gun démarrée !\n");
 }
 
 int	is_healgun_ready(t_game *game)

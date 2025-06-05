@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:21:08 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:21:09 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/04 17:01:24 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,9 @@ int	load_healgun_frame(t_game *game, int frame, const char *path)
 	if (!load_single_weapon_texture(game->mlx, &game->healgun_frames[frame],
 			(char *)path))
 	{
-		printf("Erreur: %s non trouvé\n", path);
+		printf("Error: %s not found\n", path);
 		return (0);
 	}
-	printf("✅ Chargé: %s\n", path);
 	return (1);
 }
 
@@ -54,7 +53,6 @@ void	check_reload_healgun(t_game *game)
 	if (game->player.healgun_ammo > 0)
 	{
 		game->player.healgun_is_loaded = 1;
-		printf("🔋 Heal Gun rechargé automatiquement !\n");
 	}
 }
 
@@ -64,7 +62,7 @@ void	start_healgun_animation(t_game *game)
 		return ;
 	if (!validate_healgun_use(game))
 	{
-		printf("❌ Heal Gun vide !\n");
+		printf("❌ Heal Gun empty!\n");
 		return ;
 	}
 	init_healgun_animation(game);

@@ -4,6 +4,7 @@ CFLAGS = -Wall -Wextra -Werror -I$(MLX_DIR) -I./
 MLX_DIR = ./minilibx-linux
 LDFLAGS = -L$(MLX_DIR) -lmlx_Linux -lXext -lX11 -lm
 
+CUB_PARSER_SRC = cub_parser/cub_parser.c
 UI_SRC = ui/minimap.c ui/minimap_2.c ui/minimap_3.c ui/minimap_player.c ui/health_bar.c ui/crosshair.c ui/health_bar_2.c 
 CORE_SRC = core/main.c core/game_loop.c core/init_game.c core/texture_loader.c core/weapon_loader.c core/weapon_loader_2.c core/weapon_loader_3.c core/enemy_init.c core/enemy_init_2.c core/game_loop_2.c core/init_game_2.c core/texture_loader_2.c core/init_game_3.c
 RAYCASTER_SRC = raycaster/ray_casting.c raycaster/ray_intersection.c raycaster/ray_collision.c raycaster/ray_utils.c
@@ -19,7 +20,7 @@ LASER_SRC = laser/laser.c laser/render_laser.c
 HEAL_SRC = heal/heal_system.c heal/heal_animation.c heal/heal_render.c heal/heal_utils.c heal/heal_loader.c
 WALLS_SRC = walls/wall_basic.c walls/wall_shot.c walls/wall_portal.c walls/wall_textures.c walls/wall_utils.c
 WEAPON_SRC = weapon/weapon_core.c weapon/weapon_render.c weapon/weapon_utils.c weapon/weapon_loader.c weapon/weapon_pickcup_render_2.c weapon/weapon_render_2.c weapon/weapon_utils_2.c weapon/weapon_shoot_2.c
-SRCS = $(CORE_SRC) $(RAYCASTER_SRC) $(MAP_SRC) $(PLAYER_SRC) $(RENDER_SRC) $(GNL_SRC) $(ENEMY_SRC) $(SHOOT_SRC) $(PORTAL_SRC) $(UI_SRC) $(DOOR_SRC) $(LASER_SRC) $(HEAL_SRC) $(WALLS_SRC)
+SRCS = $(CUB_PARSER_SRC) $(CORE_SRC) $(RAYCASTER_SRC) $(MAP_SRC) $(PLAYER_SRC) $(RENDER_SRC) $(GNL_SRC) $(ENEMY_SRC) $(SHOOT_SRC) $(PORTAL_SRC) $(UI_SRC) $(DOOR_SRC) $(LASER_SRC) $(HEAL_SRC) $(WALLS_SRC)
 
 OBJS = $(SRCS:.c=.o)
 RM = rm -f

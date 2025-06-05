@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:32:44 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:32:45 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/04 16:57:24 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,10 @@ void	toggle_door_state(t_game *game, int map_x, int map_y, char cell)
 {
 	if (cell == 'D')
 	{
-		printf("🚪 Ouverture de la porte à [%d,%d]\n", map_x, map_y);
 		game->map.matrix[map_y][map_x] = 'O';
 	}
 	else if (cell == 'O')
 	{
-		printf("🚪 Fermeture de la porte à [%d,%d]\n", map_x, map_y);
 		game->map.matrix[map_y][map_x] = 'D';
 	}
 }

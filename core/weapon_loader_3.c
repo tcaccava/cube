@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:33:34 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:33:35 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/04 16:55:16 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	load_single_weapon_texture(void *mlx, t_img *tex, char *path)
 	tex->ptr = mlx_xpm_file_to_image(mlx, path, &width, &height);
 	if (!tex->ptr)
 	{
-		printf("Erreur de chargement de la texture : %s\n", path);
+		printf("Error loading texture: %s\n", path);
 		return (0);
 	}
 	tex->addr = mlx_get_data_addr(tex->ptr, &tex->bits_per_pixel,
@@ -58,7 +58,7 @@ int	load_raygun(t_game *game)
 {
 	if (!load_weapon_textures(game->mlx, game->weapons[RAYGUN], RAYGUN))
 	{
-		printf("Erreur de chargement des textures du Ray Gun\n");
+		printf("Error loading Ray Gun textures\n");
 		return (0);
 	}
 	return (1);
@@ -68,7 +68,7 @@ int	load_portalgun(t_game *game)
 {
 	if (!load_weapon_textures(game->mlx, game->weapons[PORTALGUN], PORTALGUN))
 	{
-		printf("Erreur de chargement des textures du Portal Gun\n");
+		printf("Error loading Portal Gun textures\n");
 		return (0);
 	}
 	return (1);

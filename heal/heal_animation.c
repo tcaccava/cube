@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:21:06 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:21:07 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/04 17:01:11 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,10 @@ void	finish_heal_animation(t_game *game)
 {
 	game->player.healgun_animating = 0;
 	game->player.healgun_anim_frame = 0;
-	printf("✅ Animation Heal Gun terminée !\n");
 }
 
 void	set_next_frame_timer(t_game *game, int frame_durations[5])
 {
 	game->player.healgun_anim_timer = frame_durations
 	[game->player.healgun_anim_frame];
-	printf("💉 Frame healgun: %d\n", game->player.healgun_anim_frame);
 }

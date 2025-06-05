@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:33:24 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:33:25 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/04 16:54:35 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	init_map_and_player(t_game *game, char *map_file)
 		return (0);
 	if (!set_player_pos(game))
 	{
-		printf("Erreur: Aucune position de départ trouvée dans la carte!\n");
+		printf("Error: No starting position found in the map!\n");
 		return (0);
 	}
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:20:55 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:20:56 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/04 16:56:28 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,9 @@ int	check_playable_spaces(t_map *map)
 			{
 				if (y == 0 || y == map->height - 1 || x == 0
 					|| x == map->width - 1)
-					return (printf("Error: Invalid Map"));
+					return (printf("Error: Invalid Map\n"));
 				if (!check_surrounding_spaces(map, x, y))
-					return (printf("Error: Invalid Map"));
+					return (printf("Error: Invalid Map\n"));
 			}
 			x++;
 		}

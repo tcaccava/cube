@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abkhefif <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 20:15:43 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/01/08 20:16:21 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/03 15:26:17 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,6 @@ void	*ft_memset(void *s, int c, size_t n);
 char	*ft_strchr(const char *s, int c);
 int		ft_isdigit(int c);
 int		ft_atoi(const char *nptr);
+void	*ft_memset(void	*src, int c, size_t len);
 
 #endif

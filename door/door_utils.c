@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:32:58 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:32:59 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/04 17:01:01 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ void	setup_door_at_position(t_game *game, int x, int y, int *door_index)
 	game->open_doors[*door_index].x = (x * TILE_SIZE) + (TILE_SIZE / 2);
 	game->open_doors[*door_index].y = (y * TILE_SIZE) + (TILE_SIZE / 2);
 	game->open_doors[*door_index].active = 1;
-	printf("🚪 Porte ouverte initialisée à [%d,%d]\n", x, y);
 	(*door_index)++;
 }
 

@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:19:52 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:19:53 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/04 17:02:49 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void	switch_to_hands(t_player *player)
 		player->current_weapon = HANDS;
 		if (player->game)
 			player->game->current_weapon = HANDS;
-		printf("✅ Arme changée : Mains\n");
 	}
 }
 
@@ -42,10 +41,7 @@ void	switch_to_raygun(t_player *player)
 		player->current_weapon = RAYGUN;
 		if (player->game)
 			player->game->current_weapon = RAYGUN;
-		printf("✅ Arme changée : Ray Gun\n");
 	}
-	else
-		printf("❌ Ray Gun non collecté !\n");
 }
 
 void	switch_to_portalgun(t_player *player)
@@ -55,10 +51,7 @@ void	switch_to_portalgun(t_player *player)
 		player->current_weapon = PORTALGUN;
 		if (player->game)
 			player->game->current_weapon = PORTALGUN;
-		printf("✅ Arme changée : Portal Gun\n");
 	}
-	else
-		printf("❌ Portal Gun non collecté !\n");
 }
 
 void	switch_to_healgun(t_player *player)
@@ -68,8 +61,5 @@ void	switch_to_healgun(t_player *player)
 		player->current_weapon = HEALGUN;
 		if (player->game)
 			player->game->current_weapon = HEALGUN;
-		printf("✅ Arme changée : Heal Gun\n");
 	}
-	else
-		printf("❌ Heal Gun non collecté !\n");
 }

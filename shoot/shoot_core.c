@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:17:52 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:17:53 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/04 16:46:41 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ int	mouse_button(int button, int x, int y, t_game *game)
 {
 	(void)x;
 	(void)y;
-	if (game->map.north.ptr != NULL)
-		return (0);
 	if (button == 1)
 		handle_left_click(game);
 	else if (button == 4 || button == 5)

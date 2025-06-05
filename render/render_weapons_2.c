@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:18:19 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:18:20 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/04 17:03:26 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ static t_img	*get_weapon_sprite(t_game *game)
 	{
 		if (game->player.healgun_animating)
 		{
-			printf("🎬 Rendu frame %d\n", game->player.healgun_anim_frame);
 			return (&game->healgun_frames[game->player.healgun_anim_frame]);
 		}
 		else
@@ -43,7 +42,6 @@ static void	set_weapon_position(t_game *game, t_render *renderer, t_img *weapon)
 		renderer->x = (DISPLAY_WIDTH - weapon->width) + 100;
 		renderer->y = (DISPLAY_HEIGHT - weapon->height) + 250
 			+ game->pitch + 600;
-		printf("📍 healgun_2 affiché plus bas\n");
 	}
 	else
 		renderer->y = (DISPLAY_HEIGHT - weapon->height) + 250 + game->pitch;
