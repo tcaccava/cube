@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub_parser.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 17:09:31 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/04 17:11:09 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/05 20:02:39 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,8 @@ int	finalize_parsing(t_scene_data *scene, t_game *game)
 	game->map.width = calculate_map_width(game);
 	game->map.floor_color = scene->floor_color;
 	game->map.sky_color = scene->ceiling_color;
+	if (!validate_map(&game->map))
+		return (0);
 	if (!init_mlx_window(game))
 		return (printf("Error: MLX init failed\n"), 0);
 	init_player(&game->player);
