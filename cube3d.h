@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 23:09:16 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/06/04 16:30:07 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/06 20:15:13 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -687,6 +687,8 @@ void					start_raygun_animation(t_game *game);
 // shoot/shoot_healgun.c
 void					shoot_healgun(t_game *game);
 int						validate_healgun_shot(t_game *game);
+int						validate_map(t_map *map);
+int						check_map(t_map *map);
 void					execute_healgun_shot(t_game *game);
 void					handle_healgun_shot(t_game *game, t_ray *center_ray);
 

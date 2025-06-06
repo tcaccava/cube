@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub_parser.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 17:09:31 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/05 20:02:39 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/06/06 20:13:31 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,27 +17,45 @@ int	parse_color(char *color_str, int *color)
 	char	*str;
 	int		rgb[3];
 	int		i;
-	int		current_color;
-
+	int		component;
+	long		temp_value_color;
+	
+	component = 0;
 	str = color_str;
 	while (*str == ' ')
 		str++;
 	clean_line_ending(str);
 	i = 0;
-	current_color = 0;
 	rgb[0] = rgb[1] = rgb[2] = 0;
-	while (str[i] && current_color < 3)
+	while (component < 3)
 	{
-		if (ft_isdigit(str[i]))
-			rgb[current_color] = rgb[current_color] * 10 + (str[i] - '0');
-		else if (str[i] == ',')
-			current_color++;
-		else if (str[i] != ' ')
-			return (printf("Error: Invalid RGB format\n"), 0);
-		i++;
+		if (!ft_isdigit(str[i]))
+			printf("Error: RGB must start with digit\n");
+		temp_value_color = 0;
+		while (ft_isdigit(str[i]))
+		{
+			temp_value_color = temp_value_color * 10 + (str[i] - '0');
+			if (temp_value_color > 2147483647)
+				return (printf("Error: RGB value too large (exceeds int max)\n"), 0);
+			i++;
+		}
+		if (temp_value_color > 255)
+			return (printf("Error: RGB value %ld exceeds 255\n", temp_value_color), 0);
+		rgb[component] = (int)temp_value_color;
+		if (component < 2)
+		{
+			if (str[i] != ',')
+				return (printf("Error: Excpecter ',' after RGB value %d\n", component + 1));
+			i++;
+		}
+		else
+		{
+			if (str[i] != '\0')
+				return (printf("Error: Expected end of line after 3rd RGB value\n"));
+			i++;
+		}
+		component++;
 	}
-	if (current_color != 2 || rgb[0] > 255 || rgb[1] > 255 || rgb[2] > 255)
-		return (printf("Error: Invalid RGB values (0-255)\n"), 0);
 	*color = (rgb[0] << 16) | (rgb[1] << 8) | rgb[2];
 	return (1);
 }

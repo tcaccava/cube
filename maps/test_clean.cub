@@ -4,7 +4,7 @@ WE ./texture/wall.xpm
 EA ./texture/wall.xpm
 
 F 0,100,0
-C 25,25,112
+C 25,25,123
 
 111111111111
 1G0000R000H1
