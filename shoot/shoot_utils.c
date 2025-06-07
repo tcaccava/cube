@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:17:26 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:17:27 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/07 17:14:16 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,8 @@ int	damage_enemy(t_enemy *enemy, t_game *game)
 
 	map_x = (int)(enemy->x / TILE_SIZE);
 	map_y = (int)(enemy->y / TILE_SIZE);
-	printf("Enemy hit at [%d, %d]\n", map_x, map_y);
 	if (damage_enemy_at_position(game, map_x, map_y, 100))
 	{
-		printf("Enemy flatlined at [%d, %d]\n", map_x, map_y);
 		return (1);
 	}
 	return (1);

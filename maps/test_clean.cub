@@ -1,4 +1,4 @@
-NO ./texture/north.xpm
+NO ./texture/wall.xpm
 SO ./texture/wall.xpm
 WE ./texture/wall.xpm
 EA ./texture/wall.xpm
@@ -7,8 +7,8 @@ F 0,100,0
 C 25,25,25
 
 111111111111
-1G0000R000H1
-100000000001
-10000N000001
-100000000001
+1G00R00100H1
+1000000L00HM1
+10000N0100M1
+1000000100M1
 111111111111

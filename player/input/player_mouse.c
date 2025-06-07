@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:19:50 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/07 14:41:12 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/07 17:19:54 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	clamp_pitch(t_game *game)
 
 void	handle_rotation_keys_release(int keycode, t_player *player)
 {
-	if (keycode == Q  || keycode == ARROW_LEFT)
+	if (keycode == Q || keycode == ARROW_LEFT)
 		player->left_rotate = false;
 	if (keycode == E || keycode == ARROW_RIGHT)
 		player->right_rotate = false;

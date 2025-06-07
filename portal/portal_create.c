@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:18:48 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:18:49 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/07 17:19:03 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,18 +44,15 @@ int	reset_and_create_portal(t_game *game, int map_x, int map_y, int orientation)
 
 void	print_portal_created(int portal_num, int x, int y, int orientation)
 {
-	char	*direction;
-
-	direction = get_orientation_name(orientation);
-	printf("Portal %d created at [%d, %d], orientation: %s\n",
-		portal_num, x, y, direction);
+	(void)x;
+	(void)y;
+	(void)portal_num;
+	get_orientation_name(orientation);
 }
 
 void	print_portal_reset(int x, int y, int orientation)
 {
-	char	*direction;
-
-	direction = get_orientation_name(orientation);
-	printf("New portals, first at [%d, %d], orientation: %s\n",
-		x, y, direction);
+	(void)x;
+	(void)y;
+	get_orientation_name(orientation);
 }

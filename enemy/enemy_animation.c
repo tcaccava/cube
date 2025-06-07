@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:32:15 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:32:16 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/07 17:14:45 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void	update_death_animation(t_enemy *enemy)
 		if (enemy->animation.current_frame >= 3)
 			enemy->animation.current_frame = 2;
 		enemy->animation.frame_counter = 0;
-		printf("Death progression: frame %d\n", enemy->animation.current_frame);
 	}
 }
 

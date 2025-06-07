@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:33:26 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/04 17:15:45 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/07 17:04:06 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	main(int argc, char **argv)
 {
 	t_game	game;
 
+	ft_memset(&game, 0, sizeof(t_game));
 	if (argc != 2)
 	{
 		printf("Usage: %s <scene.cub>\n", argv[0]);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_validator.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:20:55 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/05 20:23:57 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/06/07 15:36:10 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,8 @@ int	validate_map(t_map *map)
 int	valid_char(char c)
 {
 	return (c == 'N' || c == 'S' || c == 'E' || c == 'W' || c == 'D' || c == 'd'
-		|| c == 'M' || c == '0' || c == '1' || c == 'G' || c == 'R' || c == 'H');
+		|| c == 'M' || c == '0' || c == '1' || c == 'G' || c == 'R' || c == 'H'
+		|| c == 'L');
 }
 
 int	check_map(t_map *map)
@@ -117,12 +118,12 @@ int	check_map(t_map *map)
 		x = 0;
 		while (x < map->width)
 		{
-			if (!valid_char(map->matrix[y][x]))
-			{
-				printf("Error: invalid char '%c' at position (%d, %d)\n",
-					map->matrix[y][x], x, y);
-				return (0);
-			}
+			// if (!valid_char(map->matrix[y][x]))
+			// {
+			// 	printf("Error: invalid char '%c' at position (%d, %d)\n",
+			// 		map->matrix[y][x], x, y);
+			// 	return (0);
+			// }
 			x++;
 		}
 		y++;

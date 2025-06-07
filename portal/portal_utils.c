@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:18:54 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:18:55 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/07 17:15:11 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ int	try_teleport_at_direction(t_game *game, int dest_x, int dest_y, int dir)
 	if (is_valid_teleport_position(game, adj_x, adj_y))
 	{
 		place_player_at_position(game, adj_x, adj_y);
-		printf("Portal teleportation successful!\n");
 		return (1);
 	}
 	return (0);
