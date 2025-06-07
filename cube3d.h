@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 23:09:16 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/06/06 20:15:13 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/07 14:37:17 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,10 @@
 # define F 102
 # define LEFT 65508
 # define RIGHT 65363
+# define ARROW_LEFT  65361
+# define ARROW_RIGHT 65363
+# define ARROW_UP    65362
+# define ARROW_DOWN  65364
 
 #define HANDS 0
 #define PORTALGUN 1  // G dans la carte

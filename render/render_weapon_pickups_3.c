@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:18:17 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:18:18 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/07 14:44:11 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	calculate_weapon_screen_pos(t_game *game, t_render *render)
 	double	corrected_dist;
 	double	weapon_height;
 
-	weapon_height = TILE_SIZE * 0.1;
+	weapon_height = TILE_SIZE * 0.25;
 	render->x = (int)((DISPLAY_WIDTH / 2) * (1 + render->floor_x
 				/ render->floor_y));
 	distance_to_projection_plane = (DISPLAY_WIDTH / 2.0)

@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:19:48 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:19:49 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/07 14:39:55 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ int	key_release(int keycode, t_player *player)
 
 void	handle_movement_keys_press(int keycode, t_player *player)
 {
-	if (keycode == W)
+	if (keycode == W || keycode == ARROW_UP)
 		player->key_up = true;
-	if (keycode == S)
+	if (keycode == S || keycode == ARROW_DOWN)
 		player->key_down = true;
 	if (keycode == A)
 		player->key_left = true;
@@ -44,9 +44,9 @@ void	handle_movement_keys_press(int keycode, t_player *player)
 
 void	handle_movement_keys_release(int keycode, t_player *player)
 {
-	if (keycode == W)
+	if (keycode == W || keycode == ARROW_UP)
 		player->key_up = false;
-	if (keycode == S)
+	if (keycode == S || keycode == ARROW_DOWN)
 		player->key_down = false;
 	if (keycode == A)
 		player->key_left = false;
@@ -56,9 +56,9 @@ void	handle_movement_keys_release(int keycode, t_player *player)
 
 void	handle_rotation_keys_press(int keycode, t_player *player)
 {
-	if (keycode == Q)
+	if (keycode == Q  || keycode == ARROW_LEFT)
 		player->left_rotate = true;
-	if (keycode == E)
+	if (keycode == E  || keycode == ARROW_RIGHT)
 		player->right_rotate = true;
 	if (keycode == R)
 		player->turn_back = true;

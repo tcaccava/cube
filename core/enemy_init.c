@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:33:14 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:33:15 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/07 14:42:03 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,6 @@ int	init_all_enemies(t_game *game)
 	while (i < game->num_enemies)
 		init_enemy(&game->enemies[i++], &sprites, &game->map.enemy_texture);
 	if (!set_enemy_pos(game))
-		printf("No enemy found in map");
+		printf("No enemy found in map\n");
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:18:21 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:18:22 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/07 14:44:40 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	render_weapon_pickup(t_game *game, t_weapon_pickup *weapon)
 	if (should_skip_weapon_render(game, weapon))
 		return ;
 	distance_to_player = calculate_distance_to_weapon(game, weapon);
-	if (distance_to_player > 200)
+	if (distance_to_player > 300)
 		return ;
 	calculate_weapon_transform(game, weapon, &renderer);
 	if (renderer.floor_y <= 0.2f)
