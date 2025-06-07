@@ -6,7 +6,7 @@
 /*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 17:09:31 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/06 20:13:31 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/07 14:32:26 by abkhefif         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,33 @@ int	parse_color(char *color_str, int *color)
 	int		rgb[3];
 	int		i;
 	int		component;
-	long		temp_value_color;
-	
-	component = 0;
+	long	temp_value_color;
+
 	str = color_str;
-	while (*str == ' ')
-		str++;
 	clean_line_ending(str);
+	
 	i = 0;
+	component = 0;
+	while (str[i])
+	{
+		if (str[i] < '0' || str[i] > '9')
+		{
+			if (str[i] == ',')
+				component++;
+			else
+				return (printf("Error: Invalid character '%c' in RGB format\n", str[i]), 0);
+		}
+		i++;
+	}
+	if (component != 2)
+		return (printf("Error: RGB must have exactly 2 commas\n"), 0);
+	i = 0;
+	component = 0;
 	rgb[0] = rgb[1] = rgb[2] = 0;
 	while (component < 3)
 	{
 		if (!ft_isdigit(str[i]))
-			printf("Error: RGB must start with digit\n");
+			return (printf("Error: RGB must start with digit\n"), 0);
 		temp_value_color = 0;
 		while (ft_isdigit(str[i]))
 		{
@@ -45,14 +59,13 @@ int	parse_color(char *color_str, int *color)
 		if (component < 2)
 		{
 			if (str[i] != ',')
-				return (printf("Error: Excpecter ',' after RGB value %d\n", component + 1));
+				return (printf("Error: Expected ',' after RGB value %d\n", component + 1), 0);
 			i++;
 		}
 		else
 		{
 			if (str[i] != '\0')
-				return (printf("Error: Expected end of line after 3rd RGB value\n"));
-			i++;
+				return (printf("Error: Expected end of line after 3rd RGB value\n"), 0);
 		}
 		component++;
 	}
