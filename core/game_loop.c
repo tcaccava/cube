@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:33:20 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:33:21 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/08 18:28:33 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,12 @@ int	render_next_frame(t_game *game)
 
 	move_player(&game->player);
 	update_all_enemies(game);
+	check_player_death(game);
+	if (game->game_over)
+	{
+		game_over_screen(game);
+		return (0);
+	}
 	update_healgun_animation(game);
 	cast_all_rays(game);
 	weapon_animation(game, &anim_frames);
