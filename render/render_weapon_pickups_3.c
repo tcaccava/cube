@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_weapon_pickups_3.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:18:17 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/07 14:44:11 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/08 18:50:49 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	calculate_weapon_screen_pos(t_game *game, t_render *render)
 	double	corrected_dist;
 	double	weapon_height;
 
-	weapon_height = TILE_SIZE * 0.25;
+	weapon_height = TILE_SIZE * 0.3;
 	render->x = (int)((DISPLAY_WIDTH / 2) * (1 + render->floor_x
 				/ render->floor_y));
 	distance_to_projection_plane = (DISPLAY_WIDTH / 2.0)
@@ -53,7 +53,7 @@ void	calculate_weapon_screen_pos(t_game *game, t_render *render)
 	render->sprite_size = (int)((weapon_height / corrected_dist)
 			* distance_to_projection_plane);
 	if (render->sprite_size > DISPLAY_HEIGHT * 2)
-		render->sprite_size = DISPLAY_HEIGHT * 2;
+		render->sprite_size = DISPLAY_HEIGHT;
 	if (render->sprite_size < 1)
 		render->sprite_size = 1;
 }
