@@ -3,45 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   map_validator.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:20:55 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/07 15:36:10 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/09 18:45:38 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cube3d.h"
-
-int	check_borders(t_map *map)
-{
-	int	x;
-	int	y;
-
-	y = 0;
-	while (y < map->height)
-	{
-		if (y == 0 || y == map->height - 1)
-		{
-			x = 0;
-			while (x < map->width)
-			{
-				if (map->matrix[y][x] != '1')
-					return (printf("Error: Invalid Map borders"));
-				x++;
-			}
-		}
-		else if ((map->matrix[y][0] != '1') || (map->matrix[y][map->width
-				- 1] != '1'))
-			return (printf("Error: Invalid Map borders"));
-		y++;
-	}
-	return (1);
-}
-
-int	is_valid_playable_char(char c)
-{
-	return (c == 'N' || c == 'S' || c == 'E' || c == 'W');
-}
 
 int	check_surrounding_spaces(t_map *map, int x, int y)
 {
@@ -109,8 +78,8 @@ int	valid_char(char c)
 
 int	check_map(t_map *map)
 {
-	int x;
-	int y;
+	int	x;
+	int	y;
 
 	y = 0;
 	while (y < map->height)
@@ -118,12 +87,12 @@ int	check_map(t_map *map)
 		x = 0;
 		while (x < map->width)
 		{
-			// if (!valid_char(map->matrix[y][x]))
-			// {
-			// 	printf("Error: invalid char '%c' at position (%d, %d)\n",
-			// 		map->matrix[y][x], x, y);
-			// 	return (0);
-			// }
+			if (!valid_char(map->matrix[y][x]))
+			{
+				printf("Error: invalid char '%c' at position (%d, %d)\n",
+					map->matrix[y][x], x, y);
+				return (0);
+			}
 			x++;
 		}
 		y++;

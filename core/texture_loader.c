@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture_loader.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:33:30 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:35:44 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/09 17:53:49 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	load_basic_textures(t_game *game)
 		return (0);
 	game->map.wall_texture.width = width;
 	game->map.wall_texture.height = height;
-	game->map.wall_texture.addr = mlx_get_data_addr (game->map.wall_texture.ptr,
+	game->map.wall_texture.addr = mlx_get_data_addr(game->map.wall_texture.ptr,
 			&game->map.wall_texture.bits_per_pixel,
 			&game->map.wall_texture.line_length,
 			&game->map.wall_texture.endian);
@@ -33,7 +33,7 @@ int	load_basic_textures(t_game *game)
 		return (0);
 	game->map.floor_texture.width = width;
 	game->map.floor_texture.height = height;
-	game->map.floor_texture.addr = mlx_get_data_addr (
+	game->map.floor_texture.addr = mlx_get_data_addr(
 			game->map.floor_texture.ptr,
 			&game->map.floor_texture.bits_per_pixel,
 			&game->map.floor_texture.line_length,
@@ -52,7 +52,7 @@ int	load_special_textures(t_game *game)
 		return (0);
 	game->map.wall_portal_texture.width = width;
 	game->map.wall_portal_texture.height = height;
-	game->map.wall_portal_texture.addr = mlx_get_data_addr (
+	game->map.wall_portal_texture.addr = mlx_get_data_addr(
 			game->map.wall_portal_texture.ptr,
 			&game->map.wall_portal_texture.bits_per_pixel,
 			&game->map.wall_portal_texture.line_length,
@@ -61,7 +61,7 @@ int	load_special_textures(t_game *game)
 			"./texture/wall_shooted.xpm", &width, &height);
 	game->map.wall_shooted_texture.width = width;
 	game->map.wall_shooted_texture.height = height;
-	game->map.wall_shooted_texture.addr = mlx_get_data_addr (
+	game->map.wall_shooted_texture.addr = mlx_get_data_addr(
 			game->map.wall_shooted_texture.ptr,
 			&game->map.wall_shooted_texture.bits_per_pixel,
 			&game->map.wall_shooted_texture.line_length,

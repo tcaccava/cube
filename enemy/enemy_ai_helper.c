@@ -3,14 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   enemy_ai_helper.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:32:05 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:32:06 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/09 02:51:31 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "../cube3d.h"
 
 #include "../cube3d.h"
 
@@ -29,7 +27,7 @@ void	handle_melee_cooldown(t_enemy *e, t_player *p)
 {
 	if (e->cooldown <= 0)
 	{
-		p->health -= 25;
+		p->health -= 15;
 		e->cooldown = 90;
 	}
 	else

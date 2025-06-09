@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   laser.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:20:58 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:20:59 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/09 03:00:52 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube3d.h"
+#include "../cube3d.h"
 
 static int	check_laser_hit(t_game *game, double ray_x, double ray_y)
 {
@@ -19,8 +19,8 @@ static int	check_laser_hit(t_game *game, double ray_x, double ray_y)
 
 	map_x = (int)(ray_x / TILE_SIZE);
 	map_y = (int)(ray_y / TILE_SIZE);
-	if (map_x >= 0 && map_x < game->map.width
-		&& map_y >= 0 && map_y < game->map.height)
+	if (map_x >= 0 && map_x < game->map.width && map_y >= 0
+		&& map_y < game->map.height)
 	{
 		if (game->map.matrix[map_y][map_x] == 'L')
 			return (1);
@@ -35,9 +35,8 @@ static int	check_wall_hit(t_game *game, double ray_x, double ray_y)
 
 	map_x = (int)(ray_x / TILE_SIZE);
 	map_y = (int)(ray_y / TILE_SIZE);
-	if (map_x >= 0 && map_x < game->map.width
-		&& map_y >= 0 && map_y < game->map.height
-		&& game->map.matrix[map_y][map_x] == '1')
+	if (map_x >= 0 && map_x < game->map.width && map_y >= 0
+		&& map_y < game->map.height && game->map.matrix[map_y][map_x] == '1')
 		return (1);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   enemy_init.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:33:14 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/07 14:42:03 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/09 17:41:38 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,17 @@ int	init_all_enemies(t_game *game)
 	t_enemy_sprites	sprites;
 	int				i;
 
-	if (!load_shared_enemy_sprites(game, sprites.walk)
-		|| !load_shared_shoot_sprites(game, sprites.shoot)
-		|| !load_shared_death_sprites(game, sprites.death))
+	if (!load_shared_enemy_sprites(game, game->shared_walk_sprites)
+		|| !load_shared_shoot_sprites(game, game->shared_shoot_sprites)
+		|| !load_shared_death_sprites(game, game->shared_death_sprites))
 		return (printf("Error: failed to load enemy textures\n"), 0);
+	sprites.walk[0] = game->shared_walk_sprites[0];
+	sprites.walk[1] = game->shared_walk_sprites[1];
+	sprites.shoot[0] = game->shared_shoot_sprites[0];
+	sprites.shoot[1] = game->shared_shoot_sprites[1];
+	sprites.death[0] = game->shared_death_sprites[0];
+	sprites.death[1] = game->shared_death_sprites[1];
+	sprites.death[2] = game->shared_death_sprites[2];
 	game->num_enemies = count_enemies_in_map(game);
 	game->enemies = malloc(sizeof(t_enemy) * game->num_enemies);
 	if (!game->enemies)

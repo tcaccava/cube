@@ -6,7 +6,7 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 23:09:16 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/06/08 18:40:11 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/06/09 18:55:31 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,11 @@
 # define TILE_SIZE 64
 # define DISPLAY_WIDTH 1920
 # define DISPLAY_HEIGHT 1080
-# define FOV (M_PI / 3)
+# define FOV 1.0471975
 # define STEP_SIZE 0.05
 
 # ifndef ENEMY_RADIUS
-#  define ENEMY_RADIUS (TILE_SIZE * 0.3)
+#  define ENEMY_RADIUS 19.2
 # endif
 
 # define WEAPON_NEUTRE 0
@@ -209,9 +209,9 @@ typedef struct s_img
 
 typedef struct s_weapon_pickup
 {
+	int					weapon_type;
 	double				x;
 	double				y;
-	int weapon_type; // RAYGUN ou PORTALGUN our HEAL GUN
 	int					active;
 	t_img				sprite;
 	double				distance_to_player;
@@ -285,13 +285,13 @@ typedef struct s_player
 	t_weapon_state		weapon;
 	bool				has_weapon[MAX_WEAPONS];
 	int					healgun_ammo;
-	int healgun_heal_applied; // Nombre de munitions
-	int healgun_is_loaded;    // 1 si chargé, 0 si vide
-	int healgun_anim_state;   // 0-4 (frame actuelle)
-	int healgun_anim_timer;   // Timer pour chaque frame
-	int healgun_animating;    // 1 si en cours d'animation
+	int					healgun_heal_applied;
+	int					healgun_is_loaded;
+	int					healgun_anim_state;
+	int					healgun_anim_timer;
+	int					healgun_animating;
 	int					healgun_frame_duration;
-	int healgun_anim_frame; // Frame actuelle de l'animation
+	int					healgun_anim_frame;
 }						t_player;
 
 typedef struct s_intersect
@@ -326,8 +326,8 @@ typedef struct s_open_door
 	double				distance_to_player;
 
 	int					orientation;
-	double width;   // ✅ NOUVEAU : largeur de l'ouverture
-	double start_x; // ✅ NOUVEAU : début de l'ouverture
+	double				width;
+	double				start_x;
 	double				start_y;
 }						t_open_door;
 
@@ -399,6 +399,9 @@ typedef struct s_game
 	void				*game_over_img;
 	int					game_over_width;
 	int					game_over_height;
+	t_img				shared_walk_sprites[2];
+	t_img				shared_shoot_sprites[2];
+	t_img				shared_death_sprites[3];
 }						t_game;
 
 typedef struct s_render
@@ -472,6 +475,21 @@ typedef struct s_los_data
 	double				y;
 	double				traveled;
 }						t_los_data;
+
+typedef struct s_cleanup_helper
+{
+	void				*destroyed[MAX_WEAPONS * 3];
+	int					destroyed_count;
+	int					i;
+	int					j;
+	int					k;
+}						t_cleanup_helper;
+
+typedef struct s_frame_data
+{
+	int					anim_frames;
+	int					game_over_timer;
+}						t_frame_data;
 
 // ========== CORE FUNCTIONS ==========
 // core/main.c
@@ -631,9 +649,6 @@ void					draw_health_bar_fill(t_game *game);
 void					draw_health_bar(t_game *game);
 
 // ui/crosshair.c
-void					draw_crosshair_line(t_game *game, int center_x,
-							int center_y, int size, unsigned int color,
-							int is_vertical);
 void					draw_crosshair(t_game *game);
 
 // ========== ENEMY FUNCTIONS ==========
@@ -753,9 +768,6 @@ int						set_open_door_positions(t_game *game);
 void					draw_open_door_sprite(t_game *game, t_img *sprite,
 							t_point pos, int size);
 void					render_all_open_doors(t_game *game);
-void					render_door_columns(t_game *game, t_open_door *door,
-							int col_start, int col_end, int door_top,
-							int door_bottom, double distance);
 int						world_to_screen_column(t_game *game, double world_x,
 							double world_y);
 // Dans la section render functions
@@ -764,10 +776,7 @@ void					render_open_door_as_sprite(t_game *game,
 void					draw_ultra_thin_door_sprite(t_game *game, t_img *sprite,
 							t_point pos, int size);
 // Dans les fonctions de rendu
-void					render_fixed_door_columns(t_game *game,
-							t_open_door *door, int center_column,
-							int door_width, int door_top, int door_bottom,
-							double distance);
+
 // Dans les fonctions de raycasting
 void					check_open_doors_on_ray(t_game *game, int column_x,
 							double radiant_angle);
@@ -799,8 +808,6 @@ void					render_laser_overlay_on_column(t_game *game,
 int						count_lasers_in_map(t_game *game);
 int						init_lasers(t_game *game);
 void					render_laser_sprite(t_game *game, t_laser *laser);
-void					draw_laser_lines(t_game *game, int start_col,
-							int end_col, int top, int bottom, double depth);
 void					render_all_lasers(t_game *game);
 int						ray_crosses_laser(t_game *game, double radiant_angle);
 void					draw_laser_line_on_column(t_game *game, int column);
@@ -833,10 +840,6 @@ void					set_next_frame_timer(t_game *game,
 void					render_healgun_animation(t_game *game);
 void					draw_arm_sprite(t_game *game, t_img *sprite, int x,
 							int y);
-void					draw_arm_row(t_game *game, t_img *sprite, int x, int y,
-							int row);
-void					draw_arm_pixel(t_game *game, t_img *sprite, int x,
-							int y, int px, int py);
 int						is_transparent_pixel(unsigned int color);
 
 // heal/heal_loader.c
@@ -987,7 +990,7 @@ void					setup_weapon_pickup_render(t_game *game,
 void					draw_weapon_pickup_sprite(t_game *game, t_img *sprite,
 							t_point pos, int size);
 // void					draw_weapon_pickup_pixel(t_game *game, t_img *sprite,
-	//					t_point pos, int size, int i, int j);
+//					t_point pos, int size, int i, int j);
 // int						is_pickup_pixel_transparent(unsigned int color);
 
 // weapon/weapon_utils.c
@@ -1103,7 +1106,7 @@ void					process_rotation_keys(t_player *player);
 
 // player/input/player_keyboard.c
 int						key_press(int keycode, t_player *player);
-int	key_release(int keycode, t_player *player);
+int						key_release(int keycode, t_player *player);
 
 void					handle_movement_keys_press(int keycode,
 							t_player *player);
@@ -1271,5 +1274,21 @@ void					check_player_death(t_game *game);
 void					game_over_screen(t_game *game);
 void					load_game_over_image(t_game *game);
 void					game_over_screen(t_game *game);
+void					cleanup_game(t_game *game);
+void					cleanup_entities(t_game *game);
+void					cleanup_weapons(t_game *game);
+void					cleanup_healgun(t_game *game);
+void					cleanup_screen_and_ui(t_game *game);
+void					cleanup_map_textures(t_game *game);
+void					cleanup_map_matrix(t_game *game);
+void					cleanup_mlx(t_game *game);
+int						key_press_wrapper(int keycode, void *param);
+void					cleanup_scene(t_scene_data *scene);
+void					cleanup_scene(t_scene_data *scene);
+void					cleanup_shared_sprites(t_game *game);
+void					weapon_animation(t_game *game, int *anim_frames);
+void					render_next_frame_weapons(t_game *game);
+int						validate_textures(t_scene_data *scene);
+int						check_borders(t_map *map);
 
 #endif

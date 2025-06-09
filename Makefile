@@ -4,9 +4,9 @@ CFLAGS = -Wall -Wextra -Werror -I$(MLX_DIR) -I./
 MLX_DIR = ./minilibx-linux
 LDFLAGS = -L$(MLX_DIR) -lmlx_Linux -lXext -lX11 -lm
 
-CUB_PARSER_SRC = cub_parser/cub_parser.c
+CUB_PARSER_SRC = cub_parser/cub_parser_3.c cub_parser/cub_parser.c cub_parser/cub_parser_2.c
 UI_SRC = ui/minimap.c ui/minimap_2.c ui/minimap_3.c ui/minimap_player.c ui/health_bar.c ui/crosshair.c ui/health_bar_2.c 
-CORE_SRC = core/game_over.c core/main.c core/game_loop.c core/init_game.c core/texture_loader.c core/weapon_loader.c core/weapon_loader_2.c core/weapon_loader_3.c core/enemy_init.c core/enemy_init_2.c core/game_loop_2.c core/init_game_2.c core/texture_loader_2.c core/init_game_3.c
+CORE_SRC = core/cleanup_3.c core/cleanup_2.c core/cleanup.c core/game_over.c core/main.c core/game_loop.c core/init_game.c core/texture_loader.c core/weapon_loader.c core/weapon_loader_2.c core/weapon_loader_3.c core/enemy_init.c core/enemy_init_2.c core/game_loop_2.c core/init_game_2.c core/texture_loader_2.c core/init_game_3.c
 RAYCASTER_SRC = raycaster/ray_casting.c raycaster/ray_intersection.c raycaster/ray_collision.c raycaster/ray_utils.c
 MAP_SRC = map/file_utils.c map/map_reader.c map/map_validator.c map/player_spawn.c map/enemy_spawn.c 
 PLAYER_SRC = player/player_move.c player/movement/player_movement.c player/movement/player_rotation.c player/input/player_keyboard.c player/input/player_weapon_switch.c player/input/player_mouse.c player/pickup/player_pickup.c player/pickup/player_pickup_healgun.c player/utils/player_utils.c player/input/input_utils.c

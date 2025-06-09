@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minimap_2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:17:00 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:17:01 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/09 03:09:22 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void	draw_cell_pixels(t_game *game, t_minimap *mini_map,
 	}
 }
 
-// Solution simple : utiliser un tableau pour regrouper les coordonnées
 void	draw_minimap_cell(t_game *game, int positions[4])
 {
 	t_minimap		*mini_map;

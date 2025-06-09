@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   weapon_loader_2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:33:32 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:33:33 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/09 17:55:15 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,9 @@ int	load_hands(t_game *game)
 		return (0);
 	game->weapons[HANDS][0].width = width;
 	game->weapons[HANDS][0].height = height;
-	game->weapons[HANDS][0].addr = mlx_get_data_addr(game->weapons[HANDS][0]
-			.ptr, &game->weapons[HANDS][0].bits_per_pixel,
+	game->weapons[HANDS][0].addr = mlx_get_data_addr
+		(game->weapons[HANDS][0].ptr,
+			&game->weapons[HANDS][0].bits_per_pixel,
 			&game->weapons[HANDS][0].line_length,
 			&game->weapons[HANDS][0].endian);
 	game->weapons[HANDS][1] = game->weapons[HANDS][0];

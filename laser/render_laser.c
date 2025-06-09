@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   render_laser.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:21:00 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:21:04 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/09 03:00:58 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube3d.h"
+#include "../cube3d.h"
 
 static void	draw_horizontal_line(t_game *game, int column, int y)
 {
@@ -26,8 +26,8 @@ static void	draw_horizontal_line(t_game *game, int column, int y)
 		x = column + x_offset;
 		if (x >= 0 && x < DISPLAY_WIDTH)
 		{
-			pixel = game->screen.addr + (y * game->screen.line_length
-					+ x * (game->screen.bits_per_pixel / 8));
+			pixel = game->screen.addr + (y * game->screen.line_length + x
+					* (game->screen.bits_per_pixel / 8));
 			*(unsigned int *)pixel = 0xFF0000;
 		}
 		x_offset++;

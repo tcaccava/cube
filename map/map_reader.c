@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_reader.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:20:51 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:20:52 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/09 18:45:43 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,36 @@ int	read_map(char *file_path, t_game *game)
 	if (!read_map_lines(file_path, game))
 		return (0);
 	set_map_dimensions(game, line_count);
+	return (1);
+}
+
+int	is_valid_playable_char(char c)
+{
+	return (c == 'N' || c == 'S' || c == 'E' || c == 'W');
+}
+
+int	check_borders(t_map *map)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y < map->height)
+	{
+		if (y == 0 || y == map->height - 1)
+		{
+			x = 0;
+			while (x < map->width)
+			{
+				if (map->matrix[y][x] != '1')
+					return (printf("Error: Invalid Map borders"));
+				x++;
+			}
+		}
+		else if ((map->matrix[y][0] != '1') || (map->matrix[y][map->width
+				- 1] != '1'))
+			return (printf("Error: Invalid Map borders"));
+		y++;
+	}
 	return (1);
 }

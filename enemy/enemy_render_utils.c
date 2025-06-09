@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   enemy_render_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:32:21 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:32:22 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/09 02:55:03 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,11 @@ void	calculate_enemy_screen_pos(t_game *game, t_render *render)
 	distance_to_projection_plane = (DISPLAY_WIDTH / 2.0)
 		/ tan(game->player.fov / 2.0);
 	corrected_dist = fmax(render->floor_y, 0.1);
-	enemy_height = TILE_SIZE * 1.4;
+	enemy_height = TILE_SIZE * 1.2;
 	render->sprite_size = (int)((enemy_height / corrected_dist)
 			* distance_to_projection_plane);
 	if (render->sprite_size > DISPLAY_HEIGHT * 2)
-		render->sprite_size = DISPLAY_HEIGHT * 2;
+		render->sprite_size = DISPLAY_HEIGHT * 1.5;
 	if (render->sprite_size < 1)
 		render->sprite_size = 1;
 }

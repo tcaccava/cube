@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heal_system.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:21:15 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:21:16 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/09 02:59:44 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,6 @@ void	consume_heal_ammo(t_game *game)
 void	apply_healing(t_game *game)
 {
 	game->player.health = 100;
-	printf("💉 Heal Gun utilisé ! Santé: %d, Munitions: %d\n",
+	printf("💉 Heal Gun utilised ! Santé: %d, Munitions: %d\n",
 		game->player.health, game->player.healgun_ammo);
 }
