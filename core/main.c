@@ -6,7 +6,7 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:33:26 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/09 05:04:12 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/06/11 19:50:33 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	if (!parse_cub_file(argv[1], &game))
-		return (1);
+		return (cleanup_game(&game), 0);
 	game.game_over = 0;
 	load_game_over_image(&game);
 	init_rays(&game);

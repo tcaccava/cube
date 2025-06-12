@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   enemy_spawn.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:20:47 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:20:48 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/12 12:18:43 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	set_enemy_pos(t_game *game)
 	while (y < game->map.height)
 	{
 		x = 0;
-		while (x < game->map.width)
+		while (x < (int)ft_strlen(game->map.matrix[y]))
 		{
 			if (game->map.matrix[y][x] == 'M')
 			{

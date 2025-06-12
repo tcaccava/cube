@@ -6,7 +6,7 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:20:51 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/09 18:45:43 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/06/12 13:16:21 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,24 +69,24 @@ int	check_borders(t_map *map)
 {
 	int	x;
 	int	y;
+	int	row_length;
 
-	y = 0;
-	while (y < map->height)
+	y = -1;
+	while (++y < map->height)
 	{
+		row_length = ft_strlen(map->matrix[y]);
 		if (y == 0 || y == map->height - 1)
 		{
-			x = 0;
-			while (x < map->width)
-			{
-				if (map->matrix[y][x] != '1')
-					return (printf("Error: Invalid Map borders"));
-				x++;
-			}
+			x = -1;
+			while (++x < row_length)
+				if (map->matrix[y][x] != '1' && map->matrix[y][x] != ' ')
+					return (printf("Error: Invalid Map borders"), 0);
 		}
-		else if ((map->matrix[y][0] != '1') || (map->matrix[y][map->width
-				- 1] != '1'))
-			return (printf("Error: Invalid Map borders"));
-		y++;
+		else if ((row_length > 0 && map->matrix[y][0] != '1'
+			&& map->matrix[y][0] != ' ') || (row_length > 1
+				&& map->matrix[y][row_length - 1] != '1'
+				&& map->matrix[y][row_length - 1] != ' '))
+			return (printf("Error: Invalid Map borders"), 0);
 	}
 	return (1);
 }

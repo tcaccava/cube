@@ -6,7 +6,7 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 23:09:16 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/06/09 18:55:31 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/06/12 12:55:41 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,9 @@ typedef struct s_scene_data
 	int					ceiling_color;
 	int					map_started;
 	int					map_count;
+	int					map_max_width;
+	int					max_line_len;
+
 }						t_scene_data;
 
 typedef struct s_ray_hit_data
@@ -580,7 +583,7 @@ t_intersect				v_intersection(int x_player, int y_player,
 							double radiant_angle);
 t_intersect				h_intersection(int x_player, int y_player,
 							double radiant_angle);
-int						is_not_wall(t_map *map, double x, double y);
+int						is_not_wall(t_map *m, double x, double y);
 double					normalize_angle(double angle);
 char					get_hit_type(t_map *map, double x, double y);
 void					store_ray_info(t_game *game, int column_x,
@@ -633,7 +636,7 @@ void					init_minimap(t_game *game);
 void					draw_minimap_background(t_game *game);
 void					draw_minimap_cells(t_game *game);
 void					minimap(t_game *game);
-void					draw_minimap_cell(t_game *game, int positions[4]);
+void					draw_minimap_cell(t_game *game, int p[4]);
 
 // ui/minimap_player.c
 void					draw_minimap_cone(t_game *game);
@@ -1290,5 +1293,14 @@ void					weapon_animation(t_game *game, int *anim_frames);
 void					render_next_frame_weapons(t_game *game);
 int						validate_textures(t_scene_data *scene);
 int						check_borders(t_map *map);
+int						validate_player_spawn_count(t_map *map);
+int						normalize_map_rows(t_game *game);
+int						validate_original_borders(t_game *game);
+int						validate_map_borders(t_game *game);
+int						validate_vertical_borders(t_game *game);
+int						validate_horizontal_borders(t_game *game);
+void					*ft_memcpy(void *dst, const void *src, size_t n);
+char					get_map_char(t_scene_data *scene, t_map *map, int y,
+							int x);
 
 #endif

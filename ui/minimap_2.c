@@ -6,11 +6,11 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:17:00 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/09 03:09:22 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/06/12 13:36:19 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube3d.h"
+#include "../cube3d.h"
 
 int	is_valid_screen_pixel(t_minimap *mini_map, int screen_pixel_x,
 		int screen_pixel_y)
@@ -54,27 +54,27 @@ void	draw_cell_pixels(t_game *game, t_minimap *mini_map,
 	}
 }
 
-void	draw_minimap_cell(t_game *game, int positions[4])
+void	draw_minimap_cell(t_game *game, int p[4])
 {
 	t_minimap		*mini_map;
-	char			cell_type;
-	unsigned int	cell_color;
+	unsigned int	color;
 	int				coords[4];
 
-	if (positions[0] < 0 || positions[0] >= game->map.width)
+	if (p[1] < 0 || p[1] >= game->map.height)
 		return ;
-	if (positions[1] < 0 || positions[1] >= game->map.height)
+	if (p[0] < 0 || p[0] >= (int)ft_strlen(game->map.matrix[p[1]]))
 		return ;
 	mini_map = &game->minimap;
-	cell_type = game->map.matrix[positions[1]][positions[0]];
-	cell_color = get_cell_color(mini_map, cell_type);
-	coords[0] = positions[2];
-	coords[1] = positions[3];
-	draw_cell_pixels(game, mini_map, cell_color, coords);
+	color = get_cell_color(mini_map, game->map.matrix[p[1]][p[0]]);
+	coords[0] = p[2];
+	coords[1] = p[3];
+	coords[2] = 0;
+	coords[3] = 0;
+	draw_cell_pixels(game, mini_map, color, coords);
 }
 
-static void	draw_minimap_row(t_game *game, int centers[2],
-		int player_pos[2], int row)
+static void	draw_minimap_row(t_game *game, int centers[2], int player_pos[2],
+		int row)
 {
 	t_minimap	*mini_map;
 	int			positions[4];

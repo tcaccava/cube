@@ -6,7 +6,7 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 18:38:40 by tcaccava          #+#    #+#             */
-/*   Updated: 2025/06/09 18:43:25 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/06/12 10:51:50 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,19 +71,25 @@ static int	setup_weapons_and_sprites(t_game *game)
 int	finalize_parsing(t_scene_data *scene, t_game *game)
 {
 	if (!validate_textures(scene))
-		return (0);
+		return (cleanup_scene(scene), 0);
 	if (!setup_map_data(scene, game))
-		return (0);
+		return (cleanup_scene(scene), 0);
 	if (!validate_map(&game->map))
-		return (0);
+		return (cleanup_scene(scene), 0);
 	if (!setup_player(game))
-		return (0);
+		return (cleanup_scene(scene), cleanup_map_matrix(game),
+			cleanup_mlx(game), 0);
 	if (!load_textures(game, scene))
-		return (0);
+		return (cleanup_scene(scene), cleanup_map_matrix(game),
+			cleanup_map_textures(game), cleanup_mlx(game), 0);
 	if (!setup_weapons_and_sprites(game))
-		return (0);
+		return (cleanup_scene(scene), cleanup_map_matrix(game),
+			cleanup_map_textures(game), cleanup_weapons(game),
+			cleanup_entities(game), cleanup_mlx(game), 0);
 	if (!init_all_enemies(game))
-		return (printf("Error: Failed to init enemies\n"), 0);
+		return (cleanup_scene(scene), cleanup_map_matrix(game),
+			cleanup_map_textures(game), cleanup_weapons(game),
+			cleanup_entities(game), cleanup_mlx(game), 0);
 	init_portals(game);
 	init_ui_components(game);
 	cleanup_scene(scene);

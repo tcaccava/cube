@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player_spawn.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:20:53 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:20:54 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/12 11:22:01 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ int	set_player_pos(t_game *game)
 	while (y < game->map.height)
 	{
 		x = 0;
-		while (x < game->map.width)
+		while (game->map.matrix[y][x]
+			&& x < (int)ft_strlen(game->map.matrix[y]))
 		{
 			if (is_player_spawn(game->map.matrix[y][x]))
 			{

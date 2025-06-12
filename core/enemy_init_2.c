@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   enemy_init_2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:33:12 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:33:13 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/12 12:18:25 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	count_enemies_in_map(t_game *game)
 	while (y < game->map.height)
 	{
 		x = 0;
-		while (x < game->map.width)
+		while (x < (int)ft_strlen(game->map.matrix[y]))
 		{
 			if (game->map.matrix[y][x] == 'M')
 				count++;

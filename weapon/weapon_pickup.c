@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   weapon_pickup.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:15:38 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:15:39 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/12 12:04:41 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,15 @@ int	count_weapons_in_map(t_game *game)
 	int	count;
 	int	y;
 	int	x;
+	int	len;
 
 	count = 0;
 	y = 0;
 	while (y < game->map.height)
 	{
+		len = ft_strlen(game->map.matrix[y]);
 		x = 0;
-		while (x < game->map.width)
+		while (x < len)
 		{
 			if (is_weapon_cell(game->map.matrix[y][x]))
 				count++;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   door_sprites.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:32:48 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:32:49 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/12 12:17:42 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	count_open_doors_in_map(t_game *game)
 	while (y < game->map.height)
 	{
 		x = 0;
-		while (x < game->map.width)
+		while (x < (int)ft_strlen(game->map.matrix[y]))
 		{
 			if (game->map.matrix[y][x] == 'O')
 				count++;

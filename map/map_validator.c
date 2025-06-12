@@ -6,7 +6,7 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:20:55 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/09 18:45:38 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/06/12 11:21:38 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,15 @@ int	check_playable_spaces(t_map *map)
 	while (y < map->height)
 	{
 		x = 0;
-		while (x < map->width)
+		while (map->matrix[y][x] && x < (int)ft_strlen(map->matrix[y]))
 		{
 			if (is_valid_playable_char(map->matrix[y][x]))
 			{
-				if (y == 0 || y == map->height - 1 || x == 0 || x == map->width
-					- 1)
-					return (printf("Error: Invalid Map\n"));
+				if (y == 0 || y == map->height - 1 || x == 0
+					|| x >= (int)ft_strlen(map->matrix[y]) - 1)
+					return (printf("Error: Invalid Map\n"), 0);
 				if (!check_surrounding_spaces(map, x, y))
-					return (printf("Error: Invalid Map\n"));
+					return (printf("Error: Invalid Map\n"), 0);
 			}
 			x++;
 		}
@@ -73,19 +73,21 @@ int	valid_char(char c)
 {
 	return (c == 'N' || c == 'S' || c == 'E' || c == 'W' || c == 'D' || c == 'd'
 		|| c == 'M' || c == '0' || c == '1' || c == 'G' || c == 'R' || c == 'H'
-		|| c == 'L');
+		|| c == 'L' || c == ' ');
 }
 
 int	check_map(t_map *map)
 {
 	int	x;
 	int	y;
+	int	row_length;
 
 	y = 0;
 	while (y < map->height)
 	{
 		x = 0;
-		while (x < map->width)
+		row_length = ft_strlen(map->matrix[y]);
+		while (x < row_length)
 		{
 			if (!valid_char(map->matrix[y][x]))
 			{
@@ -97,5 +99,7 @@ int	check_map(t_map *map)
 		}
 		y++;
 	}
+	if (!validate_player_spawn_count(map))
+		return (0);
 	return (1);
 }

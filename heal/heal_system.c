@@ -6,7 +6,7 @@
 /*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:21:15 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/09 02:59:44 by tcaccava         ###   ########.fr       */
+/*   Updated: 2025/06/12 05:01:11 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,7 @@
 void	use_healgun(t_game *game)
 {
 	if (!validate_healgun_use(game))
-	{
-		printf("❌ Heal Gun vide !\n");
 		return ;
-	}
 	start_heal_process(game);
 	consume_heal_ammo(game);
 	apply_healing(game);
@@ -50,6 +47,4 @@ void	consume_heal_ammo(t_game *game)
 void	apply_healing(t_game *game)
 {
 	game->player.health = 100;
-	printf("💉 Heal Gun utilised ! Santé: %d, Munitions: %d\n",
-		game->player.health, game->player.healgun_ammo);
 }

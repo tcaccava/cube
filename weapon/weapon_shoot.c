@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   weapon_shoot.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:15:29 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:15:30 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/12 05:00:54 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,7 @@ void	shoot_portalgun(t_game *game)
 void	shoot_healgun(t_game *game)
 {
 	if (!game->player.healgun_is_loaded)
-	{
-		printf("Heal Gun empty! Find ammo.\n");
 		return ;
-	}
 	if (game->player.healgun_ammo <= 0)
 	{
 		printf("No ammo!\n");

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heal_loader.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:21:08 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/04 17:01:24 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/12 05:00:18 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,6 @@ void	start_healgun_animation(t_game *game)
 	if (game->player.healgun_animating)
 		return ;
 	if (!validate_healgun_use(game))
-	{
-		printf("❌ Heal Gun empty!\n");
 		return ;
-	}
 	init_healgun_animation(game);
 }

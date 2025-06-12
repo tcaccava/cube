@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   weapon_loader.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abkhefif <abkhefif@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tcaccava <tcaccava@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:33:35 by abkhefif          #+#    #+#             */
-/*   Updated: 2025/06/03 14:33:36 by abkhefif         ###   ########.fr       */
+/*   Updated: 2025/06/12 12:16:38 by tcaccava         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	count_weapons_in_map(t_game *game)
 	while (y < game->map.height)
 	{
 		x = 0;
-		while (x < game->map.width)
+		while (x < (int)ft_strlen(game->map.matrix[y]))
 		{
 			if (game->map.matrix[y][x] == 'R' || game->map.matrix[y][x] == 'G'
 				|| game->map.matrix[y][x] == 'H')
@@ -81,7 +81,7 @@ int	set_weapon_positions(t_game *game)
 	while (y < game->map.height)
 	{
 		x = 0;
-		while (x < game->map.width)
+		while (x < (int)ft_strlen(game->map.matrix[y]))
 		{
 			if (is_weapon_cell(game->map.matrix[y][x])
 				&& weapon_index < game->num_weapon_pickup)
